@@ -1,0 +1,30 @@
+L'utilisation d'isolate se découpe en plusieurs étapes :
+
+	- Initialisation d'un environnement isolé :
+		> isolate [options] --init
+		cette commande renvoi alors le chemin jusqu'au dossier isolé
+		la plupart des options permettent de définir des valeurs par défauts pour l'appel du --run
+		ces valeurs peuvent être écrasées par celles passées dans l'appel du --run
+		l'option -b permet de donner un identifiant à l'environnement isolé
+		
+		
+	- Ajout des codes à exécutés dans l'environnement :
+		les codes a exécuté doivent être placés dans le dossier box du dossier isolé
+		l'ajout de fichier dans le dossier box requiert les droit administrateurs
+	
+	- Lancement des exécutions :
+		> isolate [options] --run [programme à lancer + arguments]
+		cette commande lance l'exécution d'un programme avec des droits d'accés restreints
+		cette commande n'a d'intérets que si l'on exécute un code auquel on ne fait pas confiance
+		pour des appels d'outils d'analyse statique par exemple, pas besoin de cette commande
+		
+	- Récupération des fichiers de sorties des programmes exécutés :
+		les fichiers de sorties peuvent être défini dans les options du --run
+		cependant, ces fichiers doivent être dans le dossier box, il faut donc aller les chercher après l'exécution
+	
+	- Destruction de l'environnement isolé :
+		> isolate [options]	--cleanup
+		détruit le dossier isolé et tout son contenu
+
+Pour une liste exhaustive des options et de leurs effets :
+	http://www.ucw.cz/moe/isolate.1.html

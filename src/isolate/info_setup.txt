@@ -1,0 +1,12 @@
+l'installation d'isolate passe par l'exécution de la commande 'sudo make install'.
+
+la compilation d'isolate requiert un compilateur C (gcc fait très bien l'affaire)
+et le package 'Make' ou équivalent (NMake sous windows)
+
+les sources d'isolate utilisent le package libcap-dev qui semble introuvable pour windows...
+isolate ne semble donc utilisable que sous Linux
+
+Si 'sudo make install' ne fonctionne pas, 'make isolate' permet de compiler simplement
+les sources sans générer les dossiers et fichiers de configuration utiliser par isolate.
+Ces fichiers / dossiers peuvent être ajoutés à la main après coup (isolate renvoi un message
+d'erreur indiquant ce qui lui manque).

@@ -1,0 +1,11 @@
+les [...] sont à remplacer par une vrai valeur
+
+
+# sécurisation du fichier pouvant être sudo sans mdp
+- sudo chmod 700 [path to isolate_call.sh]
+
+# autorisation sudo sans mdp
+- sudo visudo	# ouvre alors un éditeur
+	- insérer en dessous de la ligne '%sudo ALL=(ALL:ALL) ALL'
+	  la ligne '[username] ALL=(ALL) NOPASSWD: [absolute path to isolate_call.sh]'
+	  mettre `ALL` dans [username] pour autoriser toute exécution sans mdp

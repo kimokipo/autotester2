@@ -1,0 +1,27 @@
+help: featpp [sous-programme] [arguments du sous-programme]
+
+Les sous-programmes sont à choisir parmi :
+
+|setup : crée la base de données associée à un tp
+|___
+    |arg1 : le nom de la matiere
+    |arg2 : le nom du tp
+    |arg3 : le nom du fichier csv qui contient les infos de la promo
+
+|mill : détecte les updates svn dans un projet et lance des batteries de tests sur ce projet
+|___
+    |arg1 : le nom de la matiere
+    |arg2 : le nom du tp
+
+|evaluate : lance des batteries de tests sur un étudiant et un TP en particulier
+|___
+    |arg1 : le nom de la matiere
+    |arg2 : le login de l'étudiant (ou le nom de son dépôt svn)
+    |arg3 : le nom du tp
+    |arg4 : les scenarios à tester
+
+|evaluateAll : lance des batteries de tests sur tout les étudiants d'une promo et un TP en particulier
+|___
+    |arg1 : le nom de la matiere
+    |arg2 : le nom du tp
+    |arg3 : les scenarios à tester

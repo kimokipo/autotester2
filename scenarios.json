@@ -1,0 +1,8 @@
+{
+    "pim": {
+        "tp10" : ["setup", "modification", "compilationada", "adarun", "adavalkyrie"]
+    },
+    "tob": {
+        "projet-court": ["setup", "similitude", "checkstyle", "utilisationword", "compilationjava", "blackbox"]
+    }
+}

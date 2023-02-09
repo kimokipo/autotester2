@@ -1,0 +1,11 @@
+{   
+    "pim": {
+        "repository_path" : "../pim/tps",
+        "config_path" : "repository/projects/pim"
+    },
+
+    "tob": {
+        "repository_path" : "../tob/tps",
+        "config_path" : "repository/projects/tob"
+    }
+}
