@@ -17,4 +17,5 @@ test:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
+    - export PYTHONPATH=$PYTHONPATH:./src_copy/main
     - python3 src_copy/scenarios/tools/CheckStyle.py
