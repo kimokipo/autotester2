@@ -3,9 +3,6 @@ image: openjdk:8-jdk-alpine
 stages:
   - test
 
-before_script:
-  - cp -R src .
-
 variables:
   PYTHONPATH: $PYTHONPATH:$(pwd)/src
 
