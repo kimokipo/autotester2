@@ -7,7 +7,7 @@ before_script:
   - cp -R src src_copy
 
 variables:
-  PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/:$(pwd)/src_copy/isolate
+  PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/:$(pwd)/src_copy/isolate/
 
 test:
   stage: test
@@ -16,4 +16,5 @@ test:
     - javac HelloWorld.java
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
+    - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
     - python3 src_copy/scenarios/tools/CheckStyle.py
