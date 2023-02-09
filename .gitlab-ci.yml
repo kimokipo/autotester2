@@ -7,7 +7,7 @@ before_script:
   - cp -R src src_copy
 
 variables:
-  PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/typeAnnotations.py
+  PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/
 
 test:
   stage: test
