@@ -15,4 +15,5 @@ test:
     - apk add --no-cache python3
     - javac HelloWorld.java
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
+    - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - python3 src_copy/scenarios/tools/CheckStyle.py
