@@ -18,6 +18,6 @@ test:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
     - export PYTHONPATH=$PYTHONPATH:./src_copy/main
     - javac HelloWorld.java
-    - python3 src_copy/scenarios/tools/JavaCompiler.py
+    - python3 -m pip install jinja2
     - sh feat3p evaluate tob projet-court khammi evaluations/retour2 compilationjava
 
