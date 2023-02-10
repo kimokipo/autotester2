@@ -1,11 +1,15 @@
 {   
+    "username" : "kimokipo",
+    "password" : "glpat-iQmYoe6pKsqkY9yicJCU",
+    "mail" : "hammi.kamal.mpsi@hotmail.com",
+    "gitlabArbre" : "projetlong1/2022-sn/tp-b1/",
     "pim": {
-        "repository_path" : "../pim/tps",
+        "repository_path" : "pim/tps",
         "config_path" : "repository/projects/pim"
     },
 
     "tob": {
-        "repository_path" : "../tob/tps",
+        "repository_path" : "tob/tps",
         "config_path" : "repository/projects/tob"
     }
 }
