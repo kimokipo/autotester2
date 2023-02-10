@@ -1,0 +1,27 @@
+Voulez-vous jouer tous les tests (oui / non) ? non
+Voulez-vous jouer tous les tests qui n'ont pas de restriction de tentatives (infini) ? non
+
+setup : non
+    nombre de tentatives infini, vous avez joue ce test 43 fois
+    derniere tentative = 2021-08-26 13:01:50.847860
+    prochaine tentative possible = 2021-08-26 13:01:55.847860
+
+modification : non
+    nombre de tentatives infini, vous avez joue ce test 36 fois
+    derniere tentative = 2021-08-26 13:01:51.705470
+    prochaine tentative possible = 2021-08-26 13:01:56.705470
+
+compilationada : non
+    nombre de tentatives infini, vous avez joue ce test 39 fois
+    derniere tentative = 2021-08-25 19:46:27.593791
+    prochaine tentative possible = 2021-08-25 19:46:32.593791
+
+adarun : non
+    nombre de tentatives infini, vous avez joue ce test 39 fois
+    derniere tentative = 2021-08-26 13:01:58.120395
+    prochaine tentative possible = 2021-08-26 13:02:03.120395
+
+adavalkyrie : non
+    nombre de tentatives infini, vous avez joue ce test 33 fois
+    derniere tentative = 2021-08-25 19:30:46.229198
+    prochaine tentative possible = 2021-08-25 19:30:51.229198
