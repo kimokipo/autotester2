@@ -360,7 +360,7 @@ def report(scenarios : List[Scenario], results : List[List[Result]], database_ad
     return score_report
 
 
-def print_results(results : List[List[Result]], dest_file : str, mode : int, commit : bool) :
+def print_results(results : List[List[Result]], student_project_folder : str, dest_file : str, retour : str, depot : str, mode : int, commit : bool) :
     
     """
         Cette fonction a pour but principal d'appeler les print_result des
@@ -381,11 +381,24 @@ def print_results(results : List[List[Result]], dest_file : str, mode : int, com
         for result in list_result:
             result.print_result(dest_file, mode)
     import subprocess as sp
+    print(os.listdir())
+    print(dest_file)
     if (commit):
-        svnadd = "svn add " + dest_file
-        sp.run(svnadd, shell = True)
-        svncommit = "svn commit -m \" Retour du test automatique \" " + dest_file
-        sp.run(svncommit, shell = True)
+        os.chdir(student_project_folder)
+        gitconfig1 = "git config --global user.mail \"" + paths["mail"] + "\""
+        gitconfig2 = "git config --global user.name \"" + paths["username"] + "\""
+        sp.run(gitconfig1, shell = True)
+        sp.run(gitconfig2, shell = True)
+        gitadd = "git add " + retour
+        sp.run(gitadd, shell = True)
+        gitcommit = "git commit -m \" Retour du test automatique \" "
+        sp.run(gitcommit, shell = True)
+        gitchekout = "git checkout -b evaluations"
+        sp.run(gitchekout, shell = True)
+        gitpush = "git push " + depot + " evaluations" 
+        print(gitpush)
+        sp.run(gitpush, shell = True)
+        os.chdir("../../../../")
 
 
 def print_overall_progress(database_address : str, students_list : List[str], scenarios_list : List[Scenario]) -> str:
