@@ -13,9 +13,12 @@ test:
   stage: test
   script:
     - apk add --no-cache python3
+    - apk add --no-cache git
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
     - export PYTHONPATH=$PYTHONPATH:./src_copy/main
     - javac HelloWorld.java
-    - python3 src_copy/scenarios/tools/JavaCompiler.py
+    - python3 -m pip install jinja2
+    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour3 compilationjava
+
