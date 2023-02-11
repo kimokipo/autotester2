@@ -1,7 +1,0 @@
-
-
-#########################################
-# Compilation des fichiers en JAVA
-#########################################
-
-Compilation de allumettes/Jouer.java, allumettes/Arbitre.java : OK
