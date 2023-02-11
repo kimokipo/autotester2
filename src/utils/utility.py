@@ -373,6 +373,12 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
     """
     
      # Réinitialisation du fichier de destination
+    list_directory = dest_file.split('/')
+    for i in range(0,len(list_directory)):
+        try:
+            os.mkdir('/'.join(list_directory[0:i]))
+        except OSError as error:
+            print(error)    
     with open(dest_file , "w+") as writer:
         writer.write("")
     

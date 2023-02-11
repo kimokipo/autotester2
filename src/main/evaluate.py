@@ -40,7 +40,16 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
     
     depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student + "/" + tp + ".git"
     gitPull = "git pull " +  depot
+
+    list_directory = student_project_folder.split('/')
+    for i in range(0,len(list_directory)+1):
+        try:
+            os.mkdir('/'.join(list_directory[0:i]))
+        except OSError as error:
+            print(error)    
+            
     os.chdir(student_project_folder)
+
     sp.run(gitPull, shell=True)
     os.chdir("../../../../")
     gitClone = "git clone " + depot + " " + student_project_folder

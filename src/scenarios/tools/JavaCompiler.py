@@ -23,7 +23,7 @@ class JavaCompiler(Tool):
     def __init__(self, 
                 _encoding : str = "UTF-8",
                 _classpath : str = None,
-                command : str = "/usr/bin/javac") :
+                command : str = "javac") :
 
         Tool.__init__(self, command)
         self.encoding = _encoding
