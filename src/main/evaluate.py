@@ -45,7 +45,7 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
     sp.run(gitconfig2, shell = True)
     
     depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student + "/" + tp + ".git"
-    gitPull = "git pull " +  depot
+    
 
     list_directory = student_project_folder.split('/')
     for i in range(0,len(list_directory)+1):
@@ -55,11 +55,13 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
             print(error)    
             
     
-    os.chdir(student_project_folder)
-    sp.run(gitPull, shell=True)
-    os.chdir("../../../../")
     gitClone = "git clone " + depot + " " + student_project_folder
     sp.run(gitClone, shell=True)
+
+    os.chdir(student_project_folder)
+    gitpull = "git pull --no-edit " + depot + " evaluations"
+    sp.run(gitpull, shell = True)
+    os.chdir("../../../../")
 
 
     #svnUpdate = "svn update " + student_project_folder
