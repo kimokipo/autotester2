@@ -63,8 +63,8 @@ compile_files_java = ["allumettes/Jouer.java", "allumettes/Arbitre.java"]
 # Test en boite noire à exécuter
 # ------------------------------------------------------
 
-testsBN = ["exempleConfiantTricheurSujet", "exemplePresqueSujet",
-            "exempleRobustesse", "exempleTricheurSujet"]
+testsBN = ["tests/exempleConfiantTricheurSujet", "tests/exemplePresqueSujet",
+            "tests/exempleRobustesse", "tests/exempleTricheurSujet"]
 
 
 # ---------------------------------------------
