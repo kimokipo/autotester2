@@ -20,7 +20,4 @@ test:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/main
     - javac HelloWorld.java
     - python3 -m pip install jinja2
-    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour3 compilationjava
-    - cat tob/tps/khammi/projet-court/evaluations/retour3.txt
-    - cd tob/tps/khammi/projet-court 
-    - git push https://kimokipo:glpat-iQmYoe6pKsqkY9yicJCU@gitlab.com/projetlong1/2022-sn/tp-b1/tob/khammi/projet-court.git evaluations
+    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour4 compilationjava
