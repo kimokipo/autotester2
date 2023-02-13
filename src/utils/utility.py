@@ -399,6 +399,10 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
         sp.run(gitadd, shell = True)
         gitcommit = "git commit -m \" Retour du test automatique \" "
         sp.run(gitcommit, shell = True)
+        
+        gitpull = "git pull --no-edit " + depot + " evaluations"
+        sp.run(gitpull, shell = True)
+        
         gitchekout = "git checkout -b evaluations"
         sp.run(gitchekout, shell = True)
         gitpush = "git push " + depot + " evaluations" 
