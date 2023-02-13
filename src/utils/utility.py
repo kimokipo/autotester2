@@ -391,10 +391,6 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
     print(dest_file)
     if (commit):
         os.chdir(student_project_folder)
-        gitconfig1 = "git config --global user.mail \"" + paths["mail"] + "\""
-        gitconfig2 = "git config --global user.name \"" + paths["username"] + "\""
-        sp.run(gitconfig1, shell = True)
-        sp.run(gitconfig2, shell = True)
 
         gitpull = "git pull --no-edit " + depot + " evaluations"
         sp.run(gitpull, shell = True)
