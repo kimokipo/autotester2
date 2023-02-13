@@ -390,9 +390,6 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
     if (commit):
         os.chdir(student_project_folder)
 
-        gitpull = "git pull --no-edit " + depot + " evaluations"
-        sp.run(gitpull, shell = True)
-
         gitchekout = "git checkout -b evaluations"
         sp.run(gitchekout, shell = True)
         
