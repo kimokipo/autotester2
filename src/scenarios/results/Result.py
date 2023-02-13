@@ -19,7 +19,6 @@ class Result(ABC) :
         Etant de la classe Result, TextElement hérite de cette methode qui consiste à l'afficher selon son titleLVl
         """
         file_out = open(dest_file, "a")
-        print(self.get_message(mode))
         file_out.write(self.get_message(mode))
         file_out.close()
 
