@@ -387,8 +387,6 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
         for result in list_result:
             result.print_result(dest_file, mode)
     import subprocess as sp
-    print(os.listdir())
-    print(dest_file)
     if (commit):
         os.chdir(student_project_folder)
 
@@ -402,7 +400,6 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
         sp.run(gitAddCommit, shell = True)
         
         gitpush = "git push " + depot + " evaluations" 
-        print(gitpush)
         sp.run(gitpush, shell = True)
         os.chdir("../../../../")
 
