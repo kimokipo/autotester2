@@ -48,11 +48,16 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
         except OSError as error:
             print(error)    
             
+    
+    print(os.listdir())
     print("student_project_folder " + student_project_folder)
     os.chdir(student_project_folder)
-    print(os.listdir())
     sp.run(gitPull, shell=True)
     os.chdir("../../../../")
+    gitconfig1 = "git config --global user.mail \"" + paths["mail"] + "\""
+    gitconfig2 = "git config --global user.name \"" + paths["username"] + "\""
+    sp.run(gitconfig1, shell = True)
+    sp.run(gitconfig2, shell = True)
     gitClone = "git clone " + depot + " " + student_project_folder
     sp.run(gitClone, shell=True)
 
