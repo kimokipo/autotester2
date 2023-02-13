@@ -48,6 +48,7 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
         except OSError as error:
             print(error)    
             
+    print("student_project_folder " + student_project_folder)
     os.chdir(student_project_folder)
     print(os.listdir())
     sp.run(gitPull, shell=True)
