@@ -20,4 +20,4 @@ test:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/main
     - javac HelloWorld.java
     - python3 -m pip install jinja2
-    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour4 compilationjava
+    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour5 compilationjava
