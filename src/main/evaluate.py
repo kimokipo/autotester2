@@ -62,6 +62,7 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
     os.chdir("../../../../")
     gitClone = "git clone " + depot + " " + student_project_folder
     sp.run(gitClone, shell=True)
+    print(os.listdir())
 
     #svnUpdate = "svn update " + student_project_folder
     #sp.run(svnUpdate, shell=True)
@@ -88,5 +89,5 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
     results = utility.run_scenarios(scenarios_to_run, database_address, modalities_address, student, project_env, SCENARIOS)
     
     #Afficher les résultats où il faut
-    print(results)
-    #utility.print_results(results, student_project_folder, dest_address , retour + '.txt', depot, 2, commit)
+    
+    utility.print_results(results, student_project_folder, dest_address , retour + '.txt', depot, 2, commit)
