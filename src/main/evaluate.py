@@ -39,7 +39,7 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
     # Recuperation de la derniere revision
     
     
-    gitconfig1 = "git config --global user.mail \"" + paths["mail"] + "\""
+    gitconfig1 = "git config --global user.email \"" + paths["mail"] + "\""
     gitconfig2 = "git config --global user.name \"" + paths["username"] + "\""
     sp.run(gitconfig1, shell = True)
     sp.run(gitconfig2, shell = True)
