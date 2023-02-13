@@ -21,3 +21,5 @@ test:
     - javac HelloWorld.java
     - python3 -m pip install jinja2
     - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour4 compilationjava
+    - cd tob/tps/khammi/projet-court
+    - git status
