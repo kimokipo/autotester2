@@ -49,11 +49,12 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
             print(error)    
             
     os.chdir(student_project_folder)
-
+    print(os.listdir())
     sp.run(gitPull, shell=True)
     os.chdir("../../../../")
     gitClone = "git clone " + depot + " " + student_project_folder
     sp.run(gitClone, shell=True)
+
     #svnUpdate = "svn update " + student_project_folder
     #sp.run(svnUpdate, shell=True)
     
