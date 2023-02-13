@@ -395,16 +395,16 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
         gitconfig2 = "git config --global user.name \"" + paths["username"] + "\""
         sp.run(gitconfig1, shell = True)
         sp.run(gitconfig2, shell = True)
-        gitadd = "git add " + retour
-        sp.run(gitadd, shell = True)
-        gitcommit = "git commit -m \" Retour du test automatique \" "
-        sp.run(gitcommit, shell = True)
-        
+
         gitpull = "git pull --no-edit " + depot + " evaluations"
         sp.run(gitpull, shell = True)
-        
+
         gitchekout = "git checkout -b evaluations"
         sp.run(gitchekout, shell = True)
+        
+        gitAddCommit = "git add " + retour + " && git commit -m \" Retour du test automatique \""
+        sp.run(gitAddCommit, shell = True)
+        
         gitpush = "git push " + depot + " evaluations" 
         print(gitpush)
         sp.run(gitpush, shell = True)
