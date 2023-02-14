@@ -22,3 +22,4 @@ test:
     - python3 -m pip install jinja2
     - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour5 compilationjava blackbox
     - cat tob/tps/khammi/projet-court/evaluations/retour5.txt
+    - sh feat3p mill tob projet-court
