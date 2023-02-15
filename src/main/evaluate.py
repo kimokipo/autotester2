@@ -15,13 +15,14 @@ import utility
 from variables import *
 
 
-def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str, *scenarios_name) -> None:
+def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str, retour : str, *scenarios_name) -> None:
 
     '''
     Cycle d'execution manuelle des tests
 
     Paramètres :
         commit - bool : bool pour savoir si on dépose le fichier retour sur svn
+        caller - str : nom de l'appelleur de la fonction evaluate pour distinguer entre main et mill.
         student - String : Login de l'etudiant
         tp - String : nom du projet
         matiere - String : nom de la matière
@@ -86,8 +87,24 @@ def evaluate(commit : bool, matiere : str, tp : str, student : str, retour : str
     #Jouer les scénarios à jouer
     database_address = os.path.join(project_folder, "database_test.db")
     modalities_address = os.path.join(project_folder, "modalites.txt")
+    if (caller == "mill"):
+        modalities_address = os.path.join(student_project_folder, "modalites.txt")
+        os.chdir(student_project_folder)
+        gitchekout = "git checkout main"
+        sp.run(gitchekout, shell = True) 
+        os.chdir("../../../../")
+    
     results = utility.run_scenarios(scenarios_to_run, database_address, modalities_address, student, project_env, SCENARIOS)
     
+    if (caller == "mill"):
+        os.chdir(student_project_folder)
+                        
+        gitAddCommit = "git add modalites.txt && git commit -m \" Retour automatique des modalites\""
+        sp.run(gitAddCommit, shell = True)
+
+        gitpush = "git push " + depot + " main" 
+        sp.run(gitpush, shell = True)
+        os.chdir("../../../../")
     #Afficher les résultats où il faut
     
     utility.print_results(results, student_project_folder, dest_address , retour + '.txt', depot, 2, commit)

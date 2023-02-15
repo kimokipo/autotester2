@@ -59,12 +59,12 @@ def mill(matiere : str, tp : str):
         gitLog = "git log modalites.txt"
         procInfo = subprocess.run(gitLog, stdout=subprocess.PIPE, shell=True)
         info = str(procInfo.stdout.decode(sys.stdout.encoding))
-        splitInfo = info.split()
-        try :
-            index = splitInfo.index("commit")
-        except ValueError:
-            continue
-        last_control[tp_path] = splitInfo[index + 1]
+        splitInfo = info.split("commit")
+        for c in splitInfo:
+            if (c != "" and "Retour automatique des modalites" not in c):
+                last_control[tp_path] = c.split()[0]
+                break
+            
         os.chdir("../../../../")
     
     # Boucle Principale
@@ -98,12 +98,13 @@ def mill(matiere : str, tp : str):
             gitLog = "git log modalites.txt"
             procInfo = subprocess.run(gitLog, stdout=subprocess.PIPE, shell=True)
             info = str(procInfo.stdout.decode(sys.stdout.encoding))
-            splitInfo = info.split()
-            try :
-                index = splitInfo.index("commit")
-            except ValueError:
-                continue
-            revision = splitInfo[index + 1]
+
+            revision = last_control[tp_path] 
+            splitInfo = info.split("commit")
+            for c in splitInfo:
+                if (c != "" and "Retour automatique des modalites" not in c):
+                    revision = c.split()[0]
+                    break
             os.chdir("../../../../")
             
             # Initialisation si nouveau TP
@@ -123,8 +124,9 @@ def mill(matiere : str, tp : str):
 
                 scenarios_name = [scenario.run.__name__ for scenario in scenarios]
                                                      
-                evaluate.evaluate(True, matiere, tp, student_name, "retour",  *scenarios_name)
+                evaluate.evaluate(True, "mill", matiere, tp, student_name, "evaluations/retour",  *scenarios_name) 
 
+                
                 # Renvoi des sources avec les divers retours
                 #svnCommit = "svn commit -m \" Retour du test automatique \" " + tp_path + "/retour.txt"
                 #subprocess.run(svnCommit, shell=True)

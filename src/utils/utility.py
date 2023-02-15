@@ -201,6 +201,7 @@ def run_scenarios(scenarios : List[Scenario], database_address : str, modalities
         # Récupération du nombre de tentatives et éventuelle modification s'il n'est pas infini
         cur.execute("SELECT Attempts FROM " + scenario.getName() + " WHERE Students = '%s'" % student_name)
         attempts = int(cur.fetchone()[0])
+        print(attempts)
         if (attempts != -1):
             attempts += -1
             # Mise à jour du nombre de tentatives si nécessaire
@@ -378,24 +379,30 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
         try:
             os.mkdir('/'.join(list_directory[0:i]))
         except OSError as error:
-            print(error)    
+            print(error)
+    
+    import subprocess as sp
+    os.chdir(student_project_folder)
+    gitchekout = "git checkout -b evaluations"
+    sp.run(gitchekout, shell = True)
+
+    gitchekout = "git checkout evaluations"
+    sp.run(gitchekout, shell = True) 
+    os.chdir("../../../../")
+
     with open(dest_file , "w+") as writer:
         writer.write("")
-    
+
     # Pour chaque test effectué, écriture dans le fichier de destination
     for list_result in results :
         for result in list_result:
             result.print_result(dest_file, mode)
-    import subprocess as sp
     if (commit):
         os.chdir(student_project_folder)
-
-        gitchekout = "git checkout -b evaluations"
-        sp.run(gitchekout, shell = True)
         
         gitAddCommit = "git add " + retour + " && git commit -m \" Retour du test automatique \""
         sp.run(gitAddCommit, shell = True)
-        
+
         gitpush = "git push " + depot + " evaluations" 
         sp.run(gitpush, shell = True)
         os.chdir("../../../../")
