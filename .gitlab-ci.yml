@@ -1,13 +1,27 @@
-image: openjdk:8-jdk-alpine
+image: docker:stable
 
 stages:
+  - build
+  - push
   - test
+
 
 before_script:
   - cp -R src src_copy
 
 variables:
   PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/:$(pwd)/src_copy/isolate/
+
+build:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.com/AutoTester2/my-custom-image:latest .
+
+push:
+  stage: push
+  script:
+    - docker login -u souhmmia -p glpat-pQ_X-dqskG9tJWsB69cN registry.gitlab.com
+    - docker push registry.gitlab.com/AutoTester2/my-custom-image:latest
 
 test:
   stage: test
