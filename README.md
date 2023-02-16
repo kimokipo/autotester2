@@ -1,27 +1,26 @@
 ---
-title: Manuel utilisateur autotester - Professeurs
+title: Manuel utilisateur autotester2 - Professeurs
 numbersections: true
 lang: fr-FR
 ---
 
 Ce manuel est destiné à être utilisé par les professeurs qui souhaiteraient
-utiliser le framework autotester. Il explique comment installer le framework sur
-une machine, comment utiliser les différentes commandes que feat3p propose et
+utiliser le framework autotester2. Il explique comment installer le framework sur
+une machine et/ou le configurer avec gitlab-ci, comment utiliser les différentes commandes que feat3p propose et
 comment configurer les fichiers nécessaires au bon fonctionnement du framework.
 
 
 Le diagramme de classe est disponible à l'URL :
-tinyurl.com/v53amb9x
+tinyurl.com/v53amb9x  // mettre le nouveau diagramme de classe
 
 ### Table des matières
 
 I. [Installation du framework](#installation)
 II. [Architecture du framework](#architecture)
 III. [Commandes](#commandes)
-    A. [Créer la base de données](#setup)
-    B. [Récupérer le travail sur demande d'un élève](#mill)
-    C. [Lancer un cycle de tests](#evaluate)
-    D. [Lancer un cycle de tests sur une promo](#evaluateAll)
+    A. [Récupérer le travail sur demande d'un élève](#mill)
+    B. [Lancer un cycle de tests](#evaluate)
+    C. [Lancer un cycle de tests sur une promo](#evaluateAll)
 IV. [Documents utiles](#documents)
 	A. [Fichier de configuration : config.py](#config)
 	B. [Fichiers relatifs aux scripts de tests](#script)
@@ -31,8 +30,8 @@ IV. [Documents utiles](#documents)
 # I. Installation du framework  <a id='installation'></a>
 
 ## Prérequis 
-
-Les seuls prérequis sont au niveau de Python. Pour le bon fonctionnement des
+- ### Sur Machine
+Les seuls prérequis pour l'installation sous une machine sont au niveau de Python. Pour le bon fonctionnement des
 programmes, il faut avoir une version de Python 3 ou supérieure, avec la
 majorité des modules classiques (os, sys, etc.) importés via Anaconda, par
 exemple.
@@ -41,6 +40,10 @@ On précise toutefois ici que seule une machine Linux pourra accéder à la
 fonctionnalité "isolate" qui permet d'exécuter des codes inconnus en toute
 sécurité. Le reste de l'application fonctionne sur tous les systèmes
 d'exploitation.
+- ### Sur Gitlab - ci
+Pour utiliser le framework sur Gitlab-ci avec une pipeline executant un runner, il est important d'utiliser l'image docker que nous avons creé et qui est meni de touts les dependances necessiares. 
+il est à telecharger sur le lien suivant : 
+// lien
 
 
 ## Comment installer  feat3p ?
@@ -51,84 +54,54 @@ feat3p.
 
 ```bash
 git init
-git clone --single-branch --branch feat3p https://gitlab.enseeiht.fr/xavier.cregut/autotester
+git clone https://gitlab.com/projet-long/AutoTester2
 ```
+* Pour l'utilisation sous Gitlab-ci il suffit d'avoir accés au projet situé sur le meme lien gitlab : https://gitlab.com/projet-long/AutoTester2, et se rendre dans la section CI/CD -> Pipelines
 
-## Comment configurer Streamlit ?
-
-```bash
-sudo apt install python3 (installer python si besoin)
-sudo apt install python3-pip (installer pip si besoin)
-sudo apt install python3-venv (installer environnement virtuel)
-python3 -m venv myenv (creation environnement)
-source myenv/bin/activate (activer cet environnement)
-cd myenv (se placer dans cet environnement)
-pip install streamlit (installer streamlit)
-streamlit hello (verifier si tout marche bien)
-```
-
-## Comment lancer le site web en local
-
-- Se placer dans le repertoire autotester principal
-- Activer l'environnement: source myenv/bin/activate
-- Lancer l'application web: streamlit run web.py
 
 
 # II. Architecture du framework <a id='architecture'></a>
 
 Le diagramme de classe est disponible à l'URL :
 
-tinyurl.com/v53amb9x
+tinyurl.com/v53amb9x // mettre le nouveau lien
 
 # III. Commandes  <a id='commandes'></a>
 
-Il vous faudra configurer l'environnement de feat3p. L'application a besoin de connaître plusieurs chemins :
+Il vous faudra configurer l'environnement de feat3p. L'application a besoin de connaître plusieurs informations :
+- username : celui du professeur utilisant le framework et qui a accés au projet AutoTester2 et aux dépots de tous les étudiants.
+- password : Personal Access Tokens du professeur. 
+- mail : son email
+- gitlabArbre : Arboressance de groupes contenant les dépots des étudiants.
+Pour chaque matiere : 
+- le chemin du dossier (ou le lien du depot git à voir aprés) où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés.
 
-- Celui d'un dossier où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés.
-- Ceux des copies locales des dépôts SVN pour chaque liste d'élèves.
-
-Vous devez configurer le fichier "variables.json" situé au chemin "./autotester/src/variables.json", de la manière suivante :
+Pour cela vous devez configurer le fichier "variables.json" situé au chemin "./autotester/src/variables.json", de la manière suivante :
 
 ```json
 {   
+    "username" : "kimokipo",
+    "password" : "token",
+    "mail" : "hammi.kamal.mpsi@hotmail.com",
+    "gitlabArbre" : "projetlong1/2022-sn/tp-b1/",
+
     "pim": {
-        "repository_path" : "../pim/tps",
         "config_path" : "repository/projects/pim"
     },
 
     "tob": {
-        "repository_path" : "../tob/tps",
         "config_path" : "repository/projects/tob"
     }
 }
+
 ```
 
 Attention :
 
-- il ne faut pas modifier les noms "repository_path" et "config_path", cela engendrerait des erreurs
-- lorsque vous appellerez les commandes feat3p, elles prendront en argument les keys des paths correspondants, pas le nom du repository.
-
-Il est donc conseillé de synchroniser les deux.
+- il ne faut pas modifier les noms en noir comme "username" et "config_path" ect, cela engendrerait des erreurs
 
 
-### A. Créer la base de données <a id='setup'></a>
-
-Ensuite, il ne reste plus qu'à l'enseignant d'appeler la commande suivante pour créer la base de données d'un tp:
-
-```bash
-feat3p setup <matiere> <tp> <students_info>
-```
-
-Arguments :
-
-* `matiere` : Le nom de la matiere dans `variables.json`.
-* `tp` : Le nom du tp.
-* `students_info` : Le nom du fichier csv qui contient les informations de la promo.
-
-
-Cette commande créera la base données associée au tp de la matière.
-
-## B. Récupérer le travail sur demande d'un élève  <a id='mill'></a>
+### A. Récupérer le travail sur demande d'un élève  <a id='mill'></a>
 
 Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la commande suivante pour activer la détection automatique des demandes d'évaluation :
 
@@ -141,8 +114,7 @@ Arguments :
 * `matiere` : Le nom de la matiere dans `variables.json`.
 * `nom_projet` : Il s'agit du nom du dossier dans lequel se trouve le fichier de configuration `config.py` concernant le projet que le professeur souhaite tester chez l'élève.
 
-Dans les faits, cette commande va régulièrement effectuer les commandes **svn
-update** et **svn info** sur le fichier modalites.txt afin de mettre à jour les
+Dans les faits, cette commande va régulièrement effectuer les commandes **git pull** et **git log** sur le fichier modalites.txt afin de mettre à jour les
 dépôts, puis de vérifier si le fichier de modalités a été modifié depuis le
 dernier cycle de tests, auquel cas un cycle de tests est lancé. Le délai
 d'attente entre deux vérifications des sources des élèves est de 5 secondes par
@@ -151,7 +123,7 @@ fichier `mill.py`.
 
 **TODO :** Il serait préférable que WAIT_TIME soit un argument de la commande : `--period`.
 
-## C. Lancer un cycle de tests  <a id='evaluate'></a>
+## B. Lancer un cycle de tests  <a id='evaluate'></a>
 
 Il est possible pour le professeur de lancer un cycle de test pour un élève
 sans tenir compte de ses contraintes (**XXX:** les quelles ? le fichier
@@ -164,7 +136,7 @@ il faut utiliser la commande suivante :
 
 Options :
 
-* --commit : Ajouter cette option pour déposer le fichier retour sur svn.
+* --commit : Ajouter cette option pour déposer le fichier retour sur depot git de l'etudiant.
 
 Arguments :
 
@@ -172,14 +144,14 @@ Arguments :
 
 * `matiere` : Le nom de la matiere dans `variables.json`.
 
-* `etudiant` : le nom du dépôt SVN de l'étudiant (en général son login).
+* `etudiant` : le nom du dépôt git de l'étudiant (en général son login).
 
 * `retour` : nom du fichier retour
 
 * `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez l'élève.
 
 
-## D. Lancer un cycle de tests sur une promo <a id='evaluateAll'></a>
+## C. Lancer un cycle de tests sur une promo <a id='evaluateAll'></a>
 
 Il est possible pour le professeur de lancer un cycle de test pour une promo. Pour cela il faut utiliser la commande suivante :
 
@@ -189,7 +161,7 @@ feat3p evaluateAll <matiere> <nom_projet> <students_info> <scenario1> <scenario2
 
 Options :
 
-* --commit : Ajouter cette option pour déposer le fichier retour sur svn.
+* --commit : Ajouter cette option pour déposer le fichier retour sur sur depot git des étudiants.
 
 Arguments :
 
@@ -201,7 +173,7 @@ Arguments :
 
 * `retour` : nom du fichier retour
 
-* `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez l'élève.
+* `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez les élèves.
 
 
 # IV. Documents utiles <a id='documents'></a>
