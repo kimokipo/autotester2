@@ -92,6 +92,8 @@ def mill(matiere : str, tp : str):
             #subprocess.run(svnUpdate, shell=True)
 
             os.chdir(tp_path)
+            gitchekout = "git checkout main"
+            sp.run(gitchekout, shell = True) 
             gitpull = "git pull --no-edit " + depot + " main"
             sp.run(gitpull, shell = True)
 
