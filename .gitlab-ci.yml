@@ -22,7 +22,7 @@ build:
 push:
   stage: push
   script:
-    - docker login -u souhmmia -p glpat-pQ_X-dqskG9tJWsB69cN registry.gitlab.com
+    - docker login -u souhmmia2 -p glpat-pQ_X-dqskG9tJWsB69cN registry.gitlab.com
     - docker push registry.gitlab.com/autotester2/my-custom-image:latest
 
 
