@@ -17,7 +17,7 @@ variables:
 build:
   stage: build
   script:
-    - docker build -t registry.gitlab.com/autotester2/my-image:latest .
+    - docker build -t my-image:latest .
 
 
 test:
