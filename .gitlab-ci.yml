@@ -5,7 +5,6 @@ services:
 
 stages:
   - build
-  - push
   - test
 
 before_script:
@@ -17,11 +16,13 @@ variables:
 build:
   stage: build
   script:
-    - docker build -t my-image:latest .
+    - docker build -t registry.gitlab.com/projet-long/autoTester2/my-custom-image:latest .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push registry.gitlab.com/projet-long/autoTester2/my-custom-image:latest
 
 
 test:
-  image : my-image:latest
+  image : registry.gitlab.com/projet-long/autoTester2/my-custom-image:latest
   stage: test
   script:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
