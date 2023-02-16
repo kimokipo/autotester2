@@ -17,14 +17,11 @@ variables:
 build:
   stage: build
   script:
-    - docker build -t registry.gitlab.com/autotester2/my-custom-image:latest .
-
-
-
-
+    - docker build -t registry.gitlab.com/autotester2/my-image:latest .
 
 
 test:
+  image : my-image:latest
   stage: test
   script:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
