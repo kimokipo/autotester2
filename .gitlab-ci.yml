@@ -24,7 +24,13 @@ build:
 test:
   image : registry.gitlab.com/projet-long/autotester2/my-custom-image:latest
   stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger"'
   script:
+    - TRIGGER_INFO=$(echo "$CI_PIPELINE_TRIGGERED" | jq -r '.trigger' )
+    - TRIGGER_PROJECT=$(echo "$TRIGGER_INFO" | jq -r '.project' )
+    - TRIGGER_PIPELINE_ID=$(echo "$TRIGGER_INFO" | jq -r '.id' )
+    - echo "Triggered by pipeline $TRIGGER_PIPELINE_ID in project $TRIGGER_PROJECT"
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
