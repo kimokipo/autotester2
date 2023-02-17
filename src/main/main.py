@@ -13,6 +13,7 @@ import env
 from setup import setup
 from evaluate import evaluate
 from evaluateAll import evaluateAll
+from evaluateOnDemand import evaluateOnDemand
 from mill import mill
 
 # --------------------------------------------------------------------
@@ -43,6 +44,7 @@ subprogs = {
     "setup" : [setup, 3],
     "evaluate": [evaluate, len(sys.argv)-2],
     "evaluateAll" : [evaluateAll, len(sys.argv)-2],
+    "evaluateOnDemand" : [evaluateOnDemand, 1],
     "mill" : [mill, 2]
 }
 
