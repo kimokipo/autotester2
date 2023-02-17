@@ -1,6 +1,10 @@
-image: openjdk:8-jdk-alpine
+image: docker:latest
+
+services:
+  - docker:dind
 
 stages:
+  - build
   - test
 
 before_script:
@@ -9,15 +13,21 @@ before_script:
 variables:
   PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/:$(pwd)/src_copy/isolate/
 
+build:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.com/projet-long/autotester2/my-custom-image:latest .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push registry.gitlab.com/projet-long/autotester2/my-custom-image:latest
+
+
 test:
+  image : registry.gitlab.com/projet-long/autotester2/my-custom-image:latest
   stage: test
   script:
-    - apk add --no-cache python3
-    - apk add --no-cache git
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
     - export PYTHONPATH=$PYTHONPATH:./src_copy/main
     - javac HelloWorld.java
-    - python3 -m pip install jinja2
-    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour5 compilationjava
+    - sh feat3p evaluate --commit tob projet-court khammi evaluations/retour5 compilationjava 
