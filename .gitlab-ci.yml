@@ -16,7 +16,7 @@ variables:
 build:
   stage: build
   rules:
-    - if: '0 == 1'
+    - if: '"trigger" != "trigger"'
   script:
     - docker build -t registry.gitlab.com/projet-long/autotester2/my-custom-image:latest .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
