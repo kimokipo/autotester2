@@ -32,10 +32,7 @@ test:
     - apk add --no-cache python3
     - apk add --no-cache git
     - apk --update add jq
-    - TRIGGER_INFO=$(echo "$CI_PIPELINE_TRIGGERED" | jq -r '.trigger' )
-    - TRIGGER_PROJECT=$(echo "$TRIGGER_INFO" | jq -r '.project' )
-    - TRIGGER_PIPELINE_ID=$(echo "$TRIGGER_INFO" | jq -r '.id' )
-    - echo "Triggered by pipeline $TRIGGER_PIPELINE_ID in project $TRIGGER_PROJECT"
+    - echo "Triggered by $CI_PIPELINE_TRIGGERED"
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
