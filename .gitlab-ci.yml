@@ -15,6 +15,8 @@ variables:
 
 build:
   stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $CI_PIPELINE_SOURCE'
   script:
     - docker build -t registry.gitlab.com/projet-long/autotester2/my-custom-image:latest .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -27,6 +29,7 @@ test:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "trigger"'
   script:
+    - apk --update add jq
     - TRIGGER_INFO=$(echo "$CI_PIPELINE_TRIGGERED" | jq -r '.trigger' )
     - TRIGGER_PROJECT=$(echo "$TRIGGER_INFO" | jq -r '.project' )
     - TRIGGER_PIPELINE_ID=$(echo "$TRIGGER_INFO" | jq -r '.id' )
