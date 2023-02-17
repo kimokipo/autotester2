@@ -106,5 +106,6 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
         sp.run(gitpush, shell = True)
         os.chdir("../../../../")
     #Afficher les résultats où il faut
-    
+    results.append(utility.report(scenarios_to_run, results, database_address, student_name))
+
     utility.print_results(results, student_project_folder, dest_address , retour + '.txt', depot, 2, commit)
