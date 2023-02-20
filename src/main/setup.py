@@ -18,12 +18,15 @@ import json
 import csv
 
 
-def setup(matiere : str, tp : str, students_info):
+def setup(matiere : str, tp : str):
 
-    students = [f.path for f in os.scandir(paths[matiere]["repository_path"]) if f.is_dir()]
+    depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + "repository.git"
+    gitClone = "git clone " + depot
+    sp.run(gitClone, shell=True)
 
     project_folder = os.path.join(paths[matiere]["config_path"], tp)
     database_address = os.path.join(project_folder, "database_test.db")
+    students_info = "repository/1sn-autotester.csv"
 
     groupe_tp = []
     students_name = []

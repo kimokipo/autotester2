@@ -96,6 +96,16 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
     
     results = utility.run_scenarios(scenarios_to_run, database_address, modalities_address, student, project_env, SCENARIOS)
     
+    os.chdir(project_folder)
+                        
+    gitAddCommit = "git add database_test.db && git commit -m \" update automatique de la base de données\""
+    sp.run(gitAddCommit, shell = True)
+
+    depot_repo = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + "repository.git"
+    gitpush = "git push " + depot_repo 
+    sp.run(gitpush, shell = True)
+    os.chdir("../../../../")
+
     if (caller == "mill"):
         os.chdir(student_project_folder)
                         

@@ -41,7 +41,7 @@ if (len(sys.argv) == 1) or (sys.argv[1] == "help"):
     help()
 
 subprogs = {
-    "setup" : [setup, 3],
+    "setup" : [setup, 2],
     "evaluate": [evaluate, len(sys.argv)-2],
     "evaluateAll" : [evaluateAll, len(sys.argv)-2],
     "evaluateOnDemand" : [evaluateOnDemand, 1],

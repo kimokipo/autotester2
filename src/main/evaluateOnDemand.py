@@ -5,6 +5,7 @@ import sys
 from isolate import *
 from ProjectEnv import ProjectEnv
 import evaluate
+import setup
 import utility
 import importlib
 import csv
@@ -39,6 +40,7 @@ def evaluateOnDemand(project_link : str):
 
 
     # Récupérer la liste des scenarios
+    setup.setup(matiere,tp)
     project_folder = os.path.join(paths[matiere]["config_path"], tp)
     sys.path.append(project_folder)
     fichier_config = importlib.import_module("config") # Import dynamique du fichier de configuration 
@@ -49,3 +51,5 @@ def evaluateOnDemand(project_link : str):
     scenarios_name = [scenario.run.__name__ for scenario in scenarios]
                                                      
     evaluate.evaluate(True, "mill", matiere, tp, student_name, "evaluations/retour",  *scenarios_name) 
+
+    
