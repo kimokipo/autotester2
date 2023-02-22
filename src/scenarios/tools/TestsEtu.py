@@ -31,7 +31,7 @@ class TestsEtu(Tool):
         if files == []:
             files = os.listdir(projetETU)
         for file in files:
-            if "Test" in file:
+            if "Test" in file and file.endswith('.java'):
                 print(file)
                 test_file = file
                 files_runed.append(test_file)
