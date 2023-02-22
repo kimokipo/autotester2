@@ -46,11 +46,16 @@ def evaluateOnDemand(project_link : str):
     fichier_config = importlib.import_module("config") # Import dynamique du fichier de configuration 
     sys.path.remove(project_folder)
     scenarios = []
+    modalites = False
     if (os.path.exists(tp_path + "/modalites.txt")):
+        modalites = True
         scenarios = utility.get_scenarios(tp_path + "/modalites.txt", fichier_config.SCENARIOS)
+
+    if (scenarios == [] and fichier_config.SCENARIOS_To_Test != None):
+        scenarios = fichier_config.SCENARIOS_To_Test
 
     scenarios_name = [scenario.run.__name__ for scenario in scenarios]
                                                          
-    evaluate.evaluate(True, "mill", matiere, tp, student_name, "evaluations/retour",  *scenarios_name) 
+    evaluate.evaluate(True, modalites, matiere, tp, student_name, "evaluations/retour",  *scenarios_name) 
 
     

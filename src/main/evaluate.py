@@ -18,7 +18,7 @@ from variables import *
 
 TestsEtu = TestsEtu()
 
-def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str, retour : str, *scenarios_name) -> None:
+def evaluate(commit : bool, modalites : bool, matiere : str, tp : str, student : str, retour : str, *scenarios_name) -> None:
 
     '''
     Cycle d'execution manuelle des tests
@@ -84,8 +84,9 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
     #Selection des scenarios à jouer
     scenarios_to_run =[]
     #ajout du scenario evaluation des tests visibles chez etudiants.
-    scenario_TestEtu = Scenario(testsEtu)
-    scenarios_to_run.append(scenario_TestEtu)
+    if (fichier_config.Evaluate_TestsEtu == None or fichier_config.Evaluate_TestsEtu):
+        scenario_TestEtu = Scenario(testsEtu)
+        scenarios_to_run.append(scenario_TestEtu)
     
     for scenario in SCENARIOS :
         if scenario.run.__name__ in scenarios_name:
@@ -94,17 +95,17 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
     #Jouer les scénarios à jouer
     database_address = os.path.join(project_folder, "database_test.db")
     modalities_address = os.path.join(project_folder, "modalites.txt")
-    if (caller == "mill"):
+    if (modalites):
         modalities_address = os.path.join(student_project_folder, "modalites.txt")
         os.chdir(student_project_folder)
         gitchekout = "git checkout main"
         sp.run(gitchekout, shell = True) 
         os.chdir("../../../../")
     
-    results = utility.run_scenarios(scenarios_to_run, database_address, modalities_address, student, project_env, SCENARIOS)
+    results = utility.run_scenarios(modalites, scenarios_to_run, database_address, modalities_address, student, project_env, SCENARIOS)
     
     os.chdir(project_folder)
-                        
+                            
     gitAddCommit = "git add database_test.db && git commit -m \" update automatique de la base de données\""
     sp.run(gitAddCommit, shell = True)
 
@@ -113,7 +114,7 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
     sp.run(gitpush, shell = True)
     os.chdir("../../../../")
 
-    if (caller == "mill"):
+    if (modalites):
         os.chdir(student_project_folder)
                         
         gitAddCommit = "git add modalites.txt && git commit -m \" Retour automatique des modalites\""
@@ -122,6 +123,7 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
         gitpush = "git push " + depot + " main" 
         sp.run(gitpush, shell = True)
         os.chdir("../../../../")
+
     #Afficher les résultats où il faut
     results.append(utility.report(scenarios_to_run, results, database_address, student_name))
 

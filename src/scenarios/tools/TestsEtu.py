@@ -30,6 +30,12 @@ class TestsEtu(Tool):
         files_runed = []
         if files == []:
             files = os.listdir(projetETU)
+        
+        os.chdir(projetETU)
+        rmClasses = "rm *.class"
+        sp.run(rmClasses, shell = True)
+        os.chdir("../../../../")
+        
         for file in files:
             if "Test" in file and file.endswith('.java'):
                 print(file)
@@ -48,6 +54,8 @@ class TestsEtu(Tool):
                             test_ok = False
                     else:
                         test_ok = False
+                else:
+                    test_ok = False
 
         return TestsEtuResult(files_runed, details, test_ok)
     

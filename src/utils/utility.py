@@ -16,10 +16,12 @@ from Penalty import Penalty
 from typeAnnotations import *
 from Result import Result
 from ProjectEnv import ProjectEnv
-
+import shutil
+import subprocess as sp
 
 # Fichier stockant les paths utiles
 from variables import *
+
 
 
 class CompromisedFileException(Exception):
@@ -88,32 +90,39 @@ def modalities_text(scenarios : List[Scenario], database_address : str, student_
         )
 
 
-
     
 def send_files(student_project_folder : str, files : List[str], section : str):
-    list_split = student_project_folder.split("/")
-    matiere = list_split[1]
-    student = list_split[3]
-    tp = list_split[4]
+    list_split = student_project_folder.split("AutoTester2/")[1].split("/")
+    matiere = list_split[0]
+    student = list_split[2]
+    tp = list_split[3]
+
+    os.chdir(student_project_folder)
+    gitchekout = "git checkout main"
+    sp.run(gitchekout, shell = True) 
+    os.chdir("../../../../")
 
     fournies_path = "repository/projects/"+matiere+"/"+tp+"/__fournis/"+tp
+    files_copied = []
     for file in files:
         if not os.path.exists(os.path.join(student_project_folder, file)):
-            shutil.copy(fournies_path+"/"+file, dossier_destination)
-    
-    os.chdir(student_project_folder)
-    for file in file:
-            gitAdd = "git add " + file
-            sp.run(gitAdd, shell = True)
+            shutil.copy(fournies_path+"/"+file, student_project_folder)
+            files_copied.append(file)
+            
+    if (files_copied != []):
+        os.chdir(student_project_folder)
+        for file in files_copied:
+                gitAdd = "git add " + file
+                sp.run(gitAdd, shell = True)
 
-    gitCommit = "git commit -m \" Envoie des fichiers pour " + section + " \""
-    sp.run(gitCommit, shell = True)
+        gitCommit = "git commit -m \" Envoie des fichiers pour " + section + " \""
+        sp.run(gitCommit, shell = True)
 
-    depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student + "/" + tp + ".git"  
+        depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student + "/" + tp + ".git"  
 
-    gitpush = "git push " + depot
-    sp.run(gitpush, shell = True) 
-    os.chdir("../../../../")
+        gitpush = "git push " + depot + " main"
+        sp.run(gitpush, shell = True) 
+        os.chdir("../../../../")
 
 
 def parse_modalities(modalities_address : str, scenarios : List[Scenario]) -> Dict[str, str]:
@@ -202,7 +211,7 @@ def get_scenarios(modalities_address : str, scenarios : List[Scenario]) -> List[
     return new_scenarios
 
 
-def run_scenarios(scenarios : List[Scenario], database_address : str, modalities_address : str, student_name : str, project_env : ProjectEnv, SCENARIOS : List[Scenario]) -> List[List[Result]]:
+def run_scenarios(modalites : bool, scenarios : List[Scenario], database_address : str, modalities_address : str, student_name : str, project_env : ProjectEnv, SCENARIOS : List[Scenario]) -> List[List[Result]]:
     
     """
         Cette fonction a pour but principal d'exécuter tous les scénarios donnés.
@@ -255,9 +264,10 @@ def run_scenarios(scenarios : List[Scenario], database_address : str, modalities
     # Mise à jour et fermeture de la bdd
     con.commit()
     con.close()
-    # Ecriture du fichier modalites.txt avec les nouvelles valeurs de la bdd
-    with open(modalities_address, "w") as writer:
-        writer.write(modalities_text(SCENARIOS, database_address, student_name))
+    if (modalites):
+        # Ecriture du fichier modalites.txt avec les nouvelles valeurs de la bdd
+        with open(modalities_address, "w") as writer:
+            writer.write(modalities_text(SCENARIOS, database_address, student_name))
     return results
 
 
