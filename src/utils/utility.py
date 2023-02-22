@@ -86,7 +86,35 @@ def modalities_text(scenarios : List[Scenario], database_address : str, student_
             choice_all_not_limited = "non",
             scenario_data = sc_data
         )
+
+
+
     
+def send_files(student_project_folder : str, files : List[str], section : str):
+    list_split = student_project_folder.split("/")
+    matiere = list_split[1]
+    student = list_split[3]
+    tp = list_split[4]
+
+    fournies_path = "repository/projects/"+matiere+"/"+tp+"/__fournis/"+tp
+    for file in files:
+        if not os.path.exists(os.path.join(student_project_folder, file)):
+            shutil.copy(fournies_path+"/"+file, dossier_destination)
+    
+    os.chdir(student_project_folder)
+    for file in file:
+            gitAdd = "git add " + file
+            sp.run(gitAdd, shell = True)
+
+    gitCommit = "git commit -m \" Envoie des fichiers pour " + section + " \""
+    sp.run(gitCommit, shell = True)
+
+    depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student + "/" + tp + ".git"  
+
+    gitpush = "git push " + depot
+    sp.run(gitpush, shell = True) 
+    os.chdir("../../../../")
+
 
 def parse_modalities(modalities_address : str, scenarios : List[Scenario]) -> Dict[str, str]:
     
@@ -198,6 +226,8 @@ def run_scenarios(scenarios : List[Scenario], database_address : str, modalities
     for scenario in scenarios :
         # Exécution d'un scénario
         results.append(scenario.run(project_env))
+        if (scenario.getName() == "testsEtu"):
+            continue
         # Récupération du nombre de tentatives et éventuelle modification s'il n'est pas infini
         cur.execute("SELECT Attempts FROM " + scenario.getName() + " WHERE Students = '%s'" % student_name)
         attempts = int(cur.fetchone()[0])
@@ -323,6 +353,8 @@ def report(scenarios : List[Scenario], results : List[List[Result]], database_ad
     # Pour chaque scénario joué
     for i in range(len(scenarios)):
         s = scenarios[i]
+        if (s.getName() == "testsEtu"):
+            continue
         # Compteur de pénalité pour un scénario
         penalty = 0
         score_sum += s.mark

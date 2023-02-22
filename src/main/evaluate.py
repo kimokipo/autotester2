@@ -4,6 +4,8 @@ import sqlite3
 import datetime
 import sys
 import subprocess as sp
+from Section import Section
+from scenarios.tools.TestsEtu import TestsEtu
 
 # Modules featpp
 from Scenario import Scenario
@@ -14,6 +16,7 @@ import utility
 # Fichier stockant les paths utiles
 from variables import *
 
+TestsEtu = TestsEtu()
 
 def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str, retour : str, *scenarios_name) -> None:
 
@@ -80,6 +83,10 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
     
     #Selection des scenarios à jouer
     scenarios_to_run =[]
+    #ajout du scenario evaluation des tests visibles chez etudiants.
+    scenario_TestEtu = Scenario(testsEtu)
+    scenarios_to_run.append(scenario_TestEtu)
+    
     for scenario in SCENARIOS :
         if scenario.run.__name__ in scenarios_name:
             scenarios_to_run.append(scenario)
@@ -119,3 +126,9 @@ def evaluate(commit : bool, caller : str, matiere : str, tp : str, student : str
     results.append(utility.report(scenarios_to_run, results, database_address, student_name))
 
     utility.print_results(results, student_project_folder, dest_address , retour + '.txt', depot, 2, commit)
+
+def testsEtu(project_env):
+    results = [Section("Evaluation TestsEtu ", _title_Lvl = 1)]
+    run = TestsEtu.run(project_env.student_project_folder, [])
+    results.append(run)
+    return results
