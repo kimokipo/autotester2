@@ -56,7 +56,7 @@ feat3p.
 git init
 git clone https://gitlab.com/projet-long/AutoTester2
 ```
-* Pour l'utilisation sous Gitlab-ci il suffit d'avoir accés au projet situé sur le meme lien gitlab : https://gitlab.com/projet-long/AutoTester2, et se rendre dans la section CI/CD -> Pipelines
+* Pour l'utilisation sous Gitlab-ci il suffit d'avoir accés au projet situé sur le meme lien gitlab : https://gitlab.com/projet-long/AutoTester2, et se rendre dans la section CI/CD -> Pipelines (Ajouter Lancer une pipeline avec les arguments voulus)
 
 
 
@@ -69,44 +69,47 @@ tinyurl.com/v53amb9x // mettre le nouveau lien
 # III. Commandes  <a id='commandes'></a>
 
 Il vous faudra configurer l'environnement de feat3p. L'application a besoin de connaître plusieurs informations :
+
 - username : celui du professeur utilisant le framework et qui a accés au projet AutoTester2 et aux dépots de tous les étudiants.
 - password : Personal Access Tokens du professeur. 
 - mail : son email
-- gitlabArbre : Arboressance de groupes contenant les dépots des étudiants.
-Pour chaque matiere : 
-- le chemin du dossier (ou le lien du depot git à voir aprés) où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés.
 
-Pour cela vous devez configurer le fichier "variables.json" situé au chemin "./autotester/src/variables.json", de la manière suivante :
+Pour chaque matiere : 
+    - gitlabArbre : Lien gitlab du Groube contenant les dépots des étudiants.
+    - config_path : le lien du depot git où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés
+
+Pour cela vous devez configurer le fichier "variables.json" situé au chemin "./AutoTester2/src/variables.json", de la manière suivante :
 
 ```json
 {   
     "username" : "kimokipo",
     "password" : "token",
     "mail" : "hammi.kamal.mpsi@hotmail.com",
-    "gitlabArbre" : "projetlong1/2022-sn/tp-b1/",
 
     "pim": {
-        "config_path" : "repository/projects/pim"
+        "gitlabArbre" : "projetlong1/2022-sn/tp-b1/", 
+        "config_path" : "repository/projects/pim" 
     },
 
     "tob": {
-        "config_path" : "repository/projects/tob"
+        "gitlabArbre" : "projetlong1/2022-sn/tp-b1/", https://gitlab.com/projetlong1/2022-sn/tp-b1/tob
+        "config_path" : "repository/projects/tob" https://gitlab.com/projetlong1/2022-sn/tp-b1/repository/tob
     }
 }
 
 ```
-
-Attention :
-
-- il ne faut pas modifier les noms en noir comme "username" et "config_path" ect, cela engendrerait des erreurs
+- Ajouter les detaills des fichiers (leur noms et role) contenant dans tous les depots Git. surtout le "config_path"
 
 
-### A. Récupérer le travail sur demande d'un élève  <a id='mill'></a>
+
+### A. Récupérer le travail sur demande d'un élève  <a id='evaluateOnDemand'></a>
+- Ajouter version local
+- Ajouter version Gitlab ci avec pipeline et trigger.
 
 Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la commande suivante pour activer la détection automatique des demandes d'évaluation :
 
 ```bash
-feat3p mill <matiere> <nom_projet>
+feat3p evaluateOnDemand <matiere> <nom_projet>
 ```
 
 Arguments :
@@ -124,6 +127,7 @@ fichier `mill.py`.
 **TODO :** Il serait préférable que WAIT_TIME soit un argument de la commande : `--period`.
 
 ## B. Lancer un cycle de tests  <a id='evaluate'></a>
+- Ajouter declenchement manuelle du pipeline en donnant en parametres les arguments ci dessous. 
 
 Il est possible pour le professeur de lancer un cycle de test pour un élève
 sans tenir compte de ses contraintes (**XXX:** les quelles ? le fichier
@@ -152,6 +156,7 @@ Arguments :
 
 
 ## C. Lancer un cycle de tests sur une promo <a id='evaluateAll'></a>
+- Ajouter declenchement manuelle du pipeline pour lancer le script en donnant en parametres les arguments ci dessous. 
 
 Il est possible pour le professeur de lancer un cycle de test pour une promo. Pour cela il faut utiliser la commande suivante :
 
@@ -179,6 +184,11 @@ Arguments :
 # IV. Documents utiles <a id='documents'></a>
 
 ## A. Fichier de configuration : config.py  <a id='config'></a>
+- Detailler les trois cas d'utilisation avec config.py : 
+ 1. execution automatique des tests visibles chez etudiants. 
+ 2. lancement des scenarios donnees par prof ou modalites par etudiant
+ 3. realisation progressive 
+tout en expliquant les roles des varaibles contenant dans le fichier.
 
 Le fichier de configuration d'un projet est la principale interface entre
 feat3p et le professeur. Il s'agit d'un fichier python `config.py` dont un
@@ -387,7 +397,8 @@ __ExampleTestKO__ est un dossier qui contient une simulation de fichier source d
 
 
 
-## C. Fichier de modalités : modalites.txt <a id='modalites'></a>
+## C. Fichier de modalités : modalites.txt <a id='modalites'></a> 
+- le fichier modalites.txt doit etre par preferences dans la racine du depot git de etudiant, ce meme depot contient les dossiers de tps et projets de l'etudiant.
 
 Le fichier `modalites.txt` est généré lors de la [configuration d'un projet](#config). Le fichier de modalités est le support que les étudiants utilisent pour demander une évaluation de leur code. Ce fichier contient plusieurs blocs de textes, chacun relatif à un scénario de tests écrit par un professeur. Chaque bloc de texte contient le nom du scénario, la dernière date d'utilisation de ce scénario, la prochaine date à laquelle il pourra être relancé et enfin le nombre de tentatives restantes et déjà effectuées. Pour identifier les scénarios qu'un étudiant veut jouer, il suffit que ce dernier remplace le terme "non" écrit à côté du nom du scénario par "oui". Il est aussi possible de jouer tous les scénarios en remplaçant "non" par "oui" sur la première ligne du fichier de modalités, ainsi que de ne jouer que les scénario sans restriction du nombre de tentatives en remplaçant "non" par "oui" sur la deuxième ligne du fichier. Voici un exemple de fichier de modalités :
 
