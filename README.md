@@ -70,36 +70,44 @@ tinyurl.com/v53amb9x // mettre le nouveau lien
 
 Il vous faudra configurer l'environnement de feat3p. L'application a besoin de connaître plusieurs informations :
 
-- username : celui du professeur utilisant le framework et qui a accés au projet AutoTester2 et aux dépots de tous les étudiants.
+- username : celui du professeur utilisant le framework et qui a les droits de Maintainer du projet AutoTester2, du groupe des dépots des étudiants, ainsi que le depot repository de la matiere.
 - password : Personal Access Tokens du professeur. 
 - mail : son email
+- matiere : la matiere des projets et tps que le framework va travailler avec.
+- gitlabArbre : Lien gitlab du Groube contenant les dépots des étudiants pour la matiere voulu.
+- config_path : Lien du depot git nommé repository où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés pour la mème matière.
 
-Pour chaque matiere : 
-    - gitlabArbre : Lien gitlab du Groube contenant les dépots des étudiants.
-    - config_path : le lien du depot git où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés
+Pour cela vous devez  : 
+     
+- ### Sur Machine : 
+    configurer le fichier "variables.json" situé au chemin "./AutoTester2/src/variables.json", de la manière suivante :
 
-Pour cela vous devez configurer le fichier "variables.json" situé au chemin "./AutoTester2/src/variables.json", de la manière suivante :
 
 ```json
 {   
     "username" : "kimokipo",
     "password" : "token",
     "mail" : "hammi.kamal.mpsi@hotmail.com",
-
-    "pim": {
-        "gitlabArbre" : "projetlong1/2022-sn/tp-b1/", 
-        "config_path" : "repository/projects/pim" 
-    },
-
-    "tob": {
-        "gitlabArbre" : "projetlong1/2022-sn/tp-b1/", https://gitlab.com/projetlong1/2022-sn/tp-b1/tob
-        "config_path" : "repository/projects/tob" https://gitlab.com/projetlong1/2022-sn/tp-b1/repository/tob
-    }
+    "matiere" : "tob",
+    "gitlabArbre" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/", 
+    "config_path" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/repository"
 }
 
 ```
-- Ajouter les detaills des fichiers (leur noms et role) contenant dans tous les depots Git. surtout le "config_path"
 
+- ### Sur Gitlab ci
+    configurer le fichier "variables.json", ou ajouter ces variables comme variables d'environement sur le pipeline ( definir une fonction qui construit à partir de ces variables le fichier variables.json)
+
+
+* Le groupe des depots des étudiants contient un projet par etudiant avec son login comme nom du projet. Et a l'interieur de chaque projet de l'etudiant on trouve les dossiers des tps et projets de la matiere donnée.
+
+* Le depot git repository contient  : 
+    1. les dossiers des projets et tps de la matière et à l'interieur de chaque dossier tp/projet on trouve : 
+        - le fichier config.py des scenarios des tests.
+        - le dossier __fournis contenant les fichiers source de base du tp/projet.
+        - le fichier binaire de la base de données des scenarios et tentatives.
+    2. les fichiers de configuration utilisées par les outils de tests (fichier jar junit, fichier config de checkstyle ect ...)
+    3. le fichier .csv qui contient les informations (login, nom, prenom, adresse mail) des etudiants inscrits dans cette matiere.
 
 
 ### A. Récupérer le travail sur demande d'un élève  <a id='evaluateOnDemand'></a>
