@@ -184,11 +184,6 @@ Arguments :
 # IV. Documents utiles <a id='documents'></a>
 
 ## A. Fichier de configuration : config.py  <a id='config'></a>
-- Detailler les trois cas d'utilisation avec config.py : 
- 1. execution automatique des tests visibles chez etudiants. 
- 2. lancement des scenarios donnees par prof ou modalites par etudiant
- 3. realisation progressive 
-tout en expliquant les roles des varaibles contenant dans le fichier.
 
 Le fichier de configuration d'un projet est la principale interface entre
 feat3p et le professeur. Il s'agit d'un fichier python `config.py` dont un
@@ -250,8 +245,6 @@ Niveau 2:
 Le professeur peut ajouter des pénalités selon les résultats des différents
 tests comme on peut le voir dans l'exemple précédent.
 
-Afin d'être le plus flexible possible, le professeur peut se renseigner sur
-les différents attributs des différents objets dans le `README_DEV.md`
 
 
 Après avoir défini l'ensemble de ces fonctions, le professeur doit créer les
@@ -270,8 +263,9 @@ Pour créer un scénario, il y a plusieurs paramètres :
 
 * **_mark**, un entier indiquant combien de points au total représente le scénario, utile si le professeur décide d'utiliser des pénalités. Par défaut fixé à 0.
 
-Ainsi, à la fin du fichier de configuration, on trouve deux listes. La première
-correspond aux scenarios qui vont réellement faire partie du projet : 
+Ainsi, à la fin du fichier de configuration, on trouve : 
+
+ - La liste **SCENARIOS** qui correspond à tous les scenarios définis et qui vont réellement faire partie du projet : 
 
 ```
 SCENARIOS = [
@@ -281,14 +275,71 @@ SCENARIOS = [
 ]
 ```
 
-La seconde correspond aux scenarios utilisés par le professeur pour tester ses propres fichiers en interne avec la commande **runtests** : 
+- La liste **SCENARIOS_To_Test** qui correspond aux scenarios designés par le professeur pour tester le travail des étudiants, en choisisant les scenarios à jouer sans d'autres, et dans l'ordre voulu.
 
 ```
-SCENARIOS_TESTS = SCENARIOS + [
-    Scenario(scenario_test),
-    Scenario(bad_scenario_test),
+SCENARIOS_To_Test =  [
+    Scenario(scenario_example, _visible = false, _mark = 5),
+    Scenario(scenario2)
 ]
 ```
+
+- La variable booléenne Evaluate_TestsEtu qui indique si on veut lancer automatiquement les fichiers de tests visibles dans les projets des etudiants apres chaque commit de leur part.
+
+```
+Evaluate_TestsEtu = False // or True
+
+```
+
+Pour la ***realisation progressive*** d'un TP ou projet, le professeur peut définir un scenario par exercice en precisant les fichiers associés à chaque exercie. 
+
+Le professeur peut utiliser la fonction ***send_files*** définie dans le fichier **utility.py** pour transmettre les fichiers de chaque exercice à l'étudiant le moment convenable.
+
+Du coup on peut avoir une configuration comme l'exemple suivant : 
+
+
+```
+# ------------------------------------------------------
+# Fichiers à Passer pour Exercice 1
+# ------------------------------------------------------
+
+ex1_files = ["file1.java", "fileTest1.java"]
+
+
+# ------------------------------------------------------
+# Fichiers à Passer pour Exercice 2
+# ------------------------------------------------------
+
+ex1_files = ["file2.java", "fileTest2.java"]
+
+# ---------------------------------------------
+# Definition des scénarios 
+# ---------------------------------------------
+
+def setup(project_env):
+    results = []
+    results.append(Section("% Validation de : " + project_env.student_project_folder))
+    results.append(Section("% Date de l'évaluation : " + str(datetime.datetime.today())))
+
+    utility.send_files(project_env.student_project_folder, ex1_files, "EX1")
+    
+    return results
+
+def ex1(project_env):
+    results = [Section("Evaluation EX1 ", _title_Lvl = 1)]
+    run = TestsEtu.run(project_env.student_project_folder, ex1_files)
+    if (run.result == "ERROR"):
+        run.penalty = 1  
+    else:   
+        run.penalty = 0
+        utility.send_files(project_env.student_project_folder, ex2_files, "EX2")
+
+    results.append(run)
+    return results
+
+```
+
+Dans l'exemple simple ci dessus. les fichiers d'exercie 1 sont transmis à l'etudiant par le scenario setup pour le commencer le travail. Et aprés que l'etudiant remplie le fichier "file1.java" et le commit, le scenario "EX1" evalue le fichier test visible chez l'etudiant "fileTest1.java", et si le test passe on peut transmettre les fichiers de l'exercice suivant.
 
 
 ### Note concernant la sécurité de la machine lors de l'exécution du code d'un étudiant
@@ -398,7 +449,7 @@ __ExampleTestKO__ est un dossier qui contient une simulation de fichier source d
 
 
 ## C. Fichier de modalités : modalites.txt <a id='modalites'></a> 
-- le fichier modalites.txt doit etre par preferences dans la racine du depot git de etudiant, ce meme depot contient les dossiers de tps et projets de l'etudiant.
+- le fichier modalites.txt doit etre par preference dans la racine du depot git de etudiant, ce meme depot contient les dossiers de tps et projets de l'etudiant.
 
 Le fichier `modalites.txt` est généré lors de la [configuration d'un projet](#config). Le fichier de modalités est le support que les étudiants utilisent pour demander une évaluation de leur code. Ce fichier contient plusieurs blocs de textes, chacun relatif à un scénario de tests écrit par un professeur. Chaque bloc de texte contient le nom du scénario, la dernière date d'utilisation de ce scénario, la prochaine date à laquelle il pourra être relancé et enfin le nombre de tentatives restantes et déjà effectuées. Pour identifier les scénarios qu'un étudiant veut jouer, il suffit que ce dernier remplace le terme "non" écrit à côté du nom du scénario par "oui". Il est aussi possible de jouer tous les scénarios en remplaçant "non" par "oui" sur la première ligne du fichier de modalités, ainsi que de ne jouer que les scénario sans restriction du nombre de tentatives en remplaçant "non" par "oui" sur la deuxième ligne du fichier. Voici un exemple de fichier de modalités :
 
