@@ -284,14 +284,14 @@ SCENARIOS_To_Test =  [
 ]
 ```
 
-- La variable booléenne Evaluate_TestsEtu qui indique si on veut lancer automatiquement les fichiers de tests visibles dans les projets des etudiants apres chaque commit de leur part.
+- La variable booléenne **Evaluate_TestsEtu** qui indique si on veut lancer automatiquement les fichiers de tests visibles dans les projets des etudiants apres chaque commit de leur part.
 
 ```
 Evaluate_TestsEtu = False // or True
 
 ```
 
-Pour la ***realisation progressive*** d'un TP ou projet, le professeur peut définir un scenario par exercice en precisant les fichiers associés à chaque exercie. 
+Pour la ***realisation progressive*** d'un TP ou d'un projet, le professeur peut définir un scenario par exercice de tp en precisant les fichiers associés à chaque exercie. 
 
 Le professeur peut utiliser la fonction ***send_files*** définie dans le fichier **utility.py** pour transmettre les fichiers de chaque exercice à l'étudiant le moment convenable.
 
@@ -339,7 +339,11 @@ def ex1(project_env):
 
 ```
 
-Dans l'exemple simple ci dessus. les fichiers d'exercie 1 sont transmis à l'etudiant par le scenario setup pour le commencer le travail. Et aprés que l'etudiant remplie le fichier "file1.java" et le commit, le scenario "EX1" evalue le fichier test visible chez l'etudiant "fileTest1.java", et si le test passe on peut transmettre les fichiers de l'exercice suivant.
+Les fichiers d'exercie 1 sont transmis à l'etudiant par le scenario setup pour commencer le travail. 
+
+Aprés que l'etudiant remplie le fichier "file1.java" et le commit, le scenario "EX1" evalue le fichier test visible chez l'etudiant "fileTest1.java" à l'aide de l'outil TestsEtu.
+
+Si le test passe on va transmettre les fichiers de l'exercice suivant, sinon une penalité est ajoutée.
 
 
 ### Note concernant la sécurité de la machine lors de l'exécution du code d'un étudiant
