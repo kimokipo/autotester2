@@ -41,7 +41,7 @@ fonctionnalité "isolate" qui permet d'exécuter des codes inconnus en toute
 sécurité. Le reste de l'application fonctionne sur tous les systèmes
 d'exploitation.
 - ### Sur Gitlab - ci
-Pour utiliser le framework sur Gitlab-ci avec une pipeline executant un runner, il est important d'utiliser l'image docker que nous avons creé et qui est meni de touts les dependances necessiares. 
+Pour utiliser le framework sur Gitlab-ci avec une pipeline executant un runner, il est important d'utiliser l'image docker que nous avons creé et qui est meni de touts les dependances necessiares, ainsi que les fichiers scr de notre projet.
 il est à telecharger sur le lien suivant : 
 // lien
 
@@ -56,7 +56,10 @@ feat3p.
 git init
 git clone https://gitlab.com/projet-long/AutoTester2
 ```
-* Pour l'utilisation sous Gitlab-ci il suffit d'avoir accés au projet situé sur le meme lien gitlab : https://gitlab.com/projet-long/AutoTester2, et se rendre dans la section CI/CD -> Pipelines (Ajouter Lancer une pipeline avec les arguments voulus)
+* Pour l'utilisation sous Gitlab-ci :
+    1. creer un nouveau projet AutoTester2
+    2. impoter le fichier de configuration yml : **gitlab-ci.yml** qui situé sur la racine du projet : https://gitlab.com/projet-long/AutoTester2
+    3. se rendre dans la section CI/CD -> Pipelines
 
 
 
@@ -75,7 +78,7 @@ Il vous faudra configurer l'environnement de feat3p. L'application a besoin de c
 - mail : son email
 - matiere : la matiere des projets et tps que le framework va travailler avec.
 - gitlabArbre : Lien gitlab du Groube contenant les dépots des étudiants pour la matiere voulu.
-- config_path : Lien du depot git nommé repository où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés pour la mème matière.
+- repository_path : Lien du depot git nommé repository où tous vos projets seront créés, stockés puis depuis lequel ils seront envoyés pour la mème matière.
 
 Pour cela vous devez  : 
      
@@ -89,15 +92,14 @@ Pour cela vous devez  :
     "password" : "token",
     "mail" : "hammi.kamal.mpsi@hotmail.com",
     "matiere" : "tob",
-    "gitlabArbre" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/", 
-    "config_path" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/repository"
+    "gitlabArbre" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/students", 
+    "repository_path" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/repository"
 }
 
 ```
 
 - ### Sur Gitlab ci
-    configurer le fichier "variables.json", ou ajouter ces variables comme variables d'environement sur le pipeline ( definir une fonction qui construit à partir de ces variables le fichier variables.json)
-
+    ajouter ces variables comme variables d'environement sur le pipeline, avec les memes noms mentionnés.
 
 * Le groupe des depots des étudiants contient un projet par etudiant avec son login comme nom du projet. Et a l'interieur de chaque projet de l'etudiant on trouve les dossiers des tps et projets de la matiere donnée.
 
@@ -111,8 +113,8 @@ Pour cela vous devez  :
 
 
 ### A. Récupérer le travail sur demande d'un élève  <a id='evaluateOnDemand'></a>
-- Ajouter version local
-- Ajouter version Gitlab ci avec pipeline et trigger.
+
+- ### Sur Machine : 
 
 Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la commande suivante pour activer la détection automatique des demandes d'évaluation :
 
@@ -134,9 +136,24 @@ fichier `mill.py`.
 
 **TODO :** Il serait préférable que WAIT_TIME soit un argument de la commande : `--period`.
 
-## B. Lancer un cycle de tests  <a id='evaluate'></a>
-- Ajouter declenchement manuelle du pipeline en donnant en parametres les arguments ci dessous. 
+- ### Sur Gitlab ci : 
+Voici les etapes à suivre pour reussir le triggering des depots etudiants depuis le pipeline de projet AutoTester2 afin d'evaluer sur demande les travails des etudiants :
 
+1. Generer un trigger token pour le pipeline du projet AutoTester2, en se rendant dans settings -> CI/CD, puis défiler jusqu'à atteindre la section pipeline triggers, et generer votre **trigger_token**.
+
+2. ajouter cette token comme variable environement du groupe gitlab contenants les depots des etudiants. avec le meme nom :  **trigger_token**
+
+3. ajouter une autre variable d'environement appellé **project_autotester2_id** qui correspond au project id du projet AutoTester2, sur le meme groupes des depots des etudiants. 
+
+    ces deux variables vont etre utilisés par le pipeline de projet de chaque etudiant. pour cela il faut:
+
+4. ajouter le fichier **gitlab-ci-etudiant.yml** situé sur le projet : https://gitlab.com/projet-long/AutoTester2, et le mettre dans la racine du depot de chaque etudiant, en le renommant avec le nom de base : **gitlab-ci.yml**
+
+du coup si vous reussirer a faire ces etapes correctement. à chaque commit de modification par l'etudiant de son travail, le pipeline du projet etudiant se lance et qui lui declenche le pipeline du projet principale AutoTester2 pour faire l'evaluation automatique.
+
+## B. Lancer un cycle de tests  <a id='evaluate'></a>
+
+- ### sur Machine : 
 Il est possible pour le professeur de lancer un cycle de test pour un élève
 sans tenir compte de ses contraintes (**XXX:** les quelles ? le fichier
 `modalites.txt` afin de vérifier ce que l'élève a produit à la main. Pour cela
@@ -162,9 +179,7 @@ Arguments :
 
 * `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez l'élève.
 
-
 ## C. Lancer un cycle de tests sur une promo <a id='evaluateAll'></a>
-- Ajouter declenchement manuelle du pipeline pour lancer le script en donnant en parametres les arguments ci dessous. 
 
 Il est possible pour le professeur de lancer un cycle de test pour une promo. Pour cela il faut utiliser la commande suivante :
 
@@ -188,6 +203,15 @@ Arguments :
 
 * `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez les élèves.
 
+- ### sur Gitlab ci :
+il est possible de lancer manuellement le pipeline de projet Autotester2 pour lancer l'un des deux scripts  **evaluate** ou **evaluateAll**. Pour ce faire :
+
+* se rendre dans la section CI/CD -> pipelines
+* cliquer sur le boutton **Run pipeline**
+* definir deux variables d'environement : 
+    1. **type_evaluate** : avec valeur **single** pour le script **evaluate** tout seul, ou avec la valeur **All** pour le script **evaluateAll**.
+    2. **args** : avec en valeur les arguments de chaque commande mentionnés ci dessus, separes par des espaces.
+* en fin lancer le pipeline.
 
 # IV. Documents utiles <a id='documents'></a>
 
