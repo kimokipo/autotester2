@@ -20,13 +20,13 @@ import csv
 
 def setup(matiere : str, tp : str):
 
-    depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + "repository.git"
-    gitClone = "git clone " + depot
+    depot_repo = "https://" + paths["username"] + ":" + paths["password"] + "@" + paths["repository_path"].split("https://")[1] + ".git"
+    gitClone = "git clone " + depot_repo
     sp.run(gitClone, shell=True)
 
-    project_folder = os.path.join(paths[matiere]["config_path"], tp)
+    project_folder = "repository/projects/" + tp
     database_address = os.path.join(project_folder, "database_test.db")
-    students_info = "repository/1sn-autotester.csv"
+    students_info = "repository/1sn-autotester.csv"  # To do : chercher le fichier csv des etudiants dans le dossier  
 
     groupe_tp = []
     students_name = []
@@ -49,8 +49,8 @@ def setup(matiere : str, tp : str):
             print("Fichier config.py non trouvé ou mal écrit. Opération avortée.\n")
             sys.exit(1)
         sys.path.remove(project_folder)
-        f = open('scenarios.json',)
-        scenarios = json.load(f)
+        f = open('scenarios.json',)   # question à quoi sert ce variable scenarios ?
+        scenarios = json.load(f)  
         scenarios[matiere][tp] = [scenario.run.__name__ for scenario in fichier_config.SCENARIOS]
         utility.create_database(database_address, fichier_config.SCENARIOS, students_name, groupe_tp)
     

@@ -92,17 +92,17 @@ def modalities_text(scenarios : List[Scenario], database_address : str, student_
 
     
 def send_files(student_project_folder : str, files : List[str], section : str):
-    list_split = student_project_folder.split("AutoTester2/")[1].split("/")
-    matiere = list_split[0]
-    student = list_split[2]
-    tp = list_split[3]
+    matiere = paths["matiere"]
+    list_split = student_project_folder.split(matiere)[1].split("/")
+    student_name = list_split[1]
+    tp = list_split[2]
 
     os.chdir(student_project_folder)
     gitchekout = "git checkout main"
     sp.run(gitchekout, shell = True) 
-    os.chdir("../../../../")
+    os.chdir("../../../")
 
-    fournies_path = "repository/projects/"+matiere+"/"+tp+"/__fournis/"+tp
+    fournies_path = "repository/projects/"+tp+"/__fournis/"
     files_copied = []
     for file in files:
         if not os.path.exists(os.path.join(student_project_folder, file)):
@@ -115,14 +115,14 @@ def send_files(student_project_folder : str, files : List[str], section : str):
                 gitAdd = "git add " + file
                 sp.run(gitAdd, shell = True)
 
-        gitCommit = "git commit -m \" Envoie des fichiers pour " + section + " \""
+        gitCommit = "git commit -m \" Envoie automatique des fichiers pour " + section + " \""
         sp.run(gitCommit, shell = True)
 
-        depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student + "/" + tp + ".git"  
+        depot = "https://" + paths["username"] + ":" + paths["password"] + "@" + paths["gitlabArbre"].split("https://")[1] + "/" + student_name + ".git"
 
         gitpush = "git push " + depot + " main"
         sp.run(gitpush, shell = True) 
-        os.chdir("../../../../")
+        os.chdir("../../../")
 
 
 def parse_modalities(modalities_address : str, scenarios : List[Scenario]) -> Dict[str, str]:
@@ -240,7 +240,6 @@ def run_scenarios(modalites : bool, scenarios : List[Scenario], database_address
         # Récupération du nombre de tentatives et éventuelle modification s'il n'est pas infini
         cur.execute("SELECT Attempts FROM " + scenario.getName() + " WHERE Students = '%s'" % student_name)
         attempts = int(cur.fetchone()[0])
-        print(attempts)
         if (attempts != -1):
             attempts += -1
             # Mise à jour du nombre de tentatives si nécessaire
@@ -414,7 +413,8 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
             dest_file : String - La localisation du fichier dans lequel écrire les résultats
             mode : Int - Le mode d'écriture (détaillé, synthétique, ...) 
     """
-    
+    tp = student_project_folder.split("/")[-1]
+
      # Réinitialisation du fichier de destination
     list_directory = dest_file.split('/')
     for i in range(0,len(list_directory)):
@@ -430,7 +430,7 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
 
     gitchekout = "git checkout evaluations"
     sp.run(gitchekout, shell = True) 
-    os.chdir("../../../../")
+    os.chdir("../../../")
 
     with open(dest_file , "w+") as writer:
         writer.write("")
@@ -447,7 +447,7 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
 
         gitpush = "git push " + depot + " evaluations" 
         sp.run(gitpush, shell = True)
-        os.chdir("../../../../")
+        os.chdir("../../../")
 
 
 def print_overall_progress(database_address : str, students_list : List[str], scenarios_list : List[Scenario]) -> str:

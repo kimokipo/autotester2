@@ -44,7 +44,7 @@ subprogs = {
     "setup" : [setup, 2],
     "evaluate": [evaluate, len(sys.argv)-2],
     "evaluateAll" : [evaluateAll, len(sys.argv)-2],
-    "evaluateOnDemand" : [evaluateOnDemand, 1],
+    "evaluateOnDemand" : [evaluateOnDemand, len(sys.argv)-2],
     "mill" : [mill, 2]
 }
 
@@ -57,10 +57,10 @@ if (nb_args+2 > len(sys.argv)) and (subprog != "setup"):
 else:
     if (sys.argv[2] == "--commit" and (sys.argv[1] == "evaluate" or sys.argv[1] == "evaluateAll")):
         arg_list = sys.argv[3:nb_args+2]
-        subprog[0](True, "main", *arg_list)
+        subprog[0](True, False, *arg_list)
     elif (sys.argv[2] != "--commit" and (sys.argv[1] == "evaluate" or sys.argv[1] == "evaluateAll")):
         arg_list = sys.argv[2:nb_args+2]
-        subprog[0](False, "main", *arg_list)
+        subprog[0](False, False, *arg_list)
     else:
         arg_list = sys.argv[2:nb_args+2]
         subprog[0](*arg_list)

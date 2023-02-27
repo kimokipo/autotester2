@@ -34,7 +34,7 @@ class TestsEtu(Tool):
         os.chdir(projetETU)
         rmClasses = "rm *.class"
         sp.run(rmClasses, shell = True)
-        os.chdir("../../../../")
+        os.chdir("../../../")
         
         for file in files:
             if "Test" in file and file.endswith('.java'):

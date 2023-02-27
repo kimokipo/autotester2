@@ -19,13 +19,9 @@ import json
 import csv
 
 
-def evaluateAll(commit : bool, matiere : str, tp : str, students_info, retour : bool, *scenarios_name) -> None:
+def evaluateAll(commit : bool, modalites : bool, matiere : str, tp : str, retour : str, *scenarios_name) -> None:
 
-    students = [f.path for f in os.scandir(paths[matiere]["repository_path"]) if f.is_dir()]
-
-    project_folder = os.path.join(paths[matiere]["config_path"], tp)
-    database_address = os.path.join(project_folder, "database_test.db")
-
+    students_info = "repository/1sn-autotester.csv"  # To do : chercher le fichier csv des etudiants dans le dossier  
     students_name = []
     with open(students_info) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -34,4 +30,4 @@ def evaluateAll(commit : bool, matiere : str, tp : str, students_info, retour : 
     students_name = students_name[1:]
 
     for student_name in students_name:
-        evaluate.evaluate(commit, matiere, tp, student_name, retour, *scenarios_name)
+        evaluate.evaluate(commit, modalites, matiere, tp, student_name, retour, *scenarios_name)

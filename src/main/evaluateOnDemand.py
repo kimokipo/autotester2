@@ -13,49 +13,50 @@ import csv
 # Fichier stockant les paths utiles
 from variables import *
 
-def evaluateOnDemand(project_link : str):
-    
-    list_lien = project_link.split(paths["gitlabArbre"])[1].split("/")
+def evaluateOnDemand(project_student_link : str, *tp_folders):
 
-    matiere = list_lien[0]
-    student_name = list_lien[1]
-    tp = list_lien[2].split('.git')[0]
+    student_name = project_student_link.split("/")[-1]
 
-    print("matiere : " + matiere + " student_name : " + student_name + " tp : "+ tp)
-    
-    project_path = paths[matiere]["repository_path"] 
+    matiere = paths["matiere"]
 
-    tp_path = project_path + "/" + student_name + "/" + tp
+    print("matiere : " + matiere + " student_name : " + student_name)
+    student_path = matiere + "/" + student_name
 
-    list_directory = tp_path.split('/')
+    list_directory = student_path.split('/')
     for i in range(0,len(list_directory)+1):
         try:
             os.mkdir('/'.join(list_directory[0:i]))
         except OSError as error:
             print(error)  
 
-    depot = "https://" + paths["username"] + ":" + paths["password"] + "@gitlab.com/" + paths["gitlabArbre"] + matiere + "/" + student_name + "/" + tp + ".git"
-    gitClone = "git clone " + depot + " " + tp_path
+    depot = "https://" + paths["username"] + ":" + paths["password"] + "@" + paths["gitlabArbre"].split("https://")[1] + "/" + student_name + ".git"
+    gitClone = "git clone " + depot + " " + student_path
     sp.run(gitClone, shell=True)
 
+    for tp in tp_folders:
 
-    # Récupérer la liste des scenarios
-    setup.setup(matiere,tp)
-    project_folder = os.path.join(paths[matiere]["config_path"], tp)
-    sys.path.append(project_folder)
-    fichier_config = importlib.import_module("config") # Import dynamique du fichier de configuration 
-    sys.path.remove(project_folder)
-    scenarios = []
-    modalites = False
-    if (os.path.exists(tp_path + "/modalites.txt")):
-        modalites = True
-        scenarios = utility.get_scenarios(tp_path + "/modalites.txt", fichier_config.SCENARIOS)
+        print("tp : "+ tp)
+        tp_path = student_path + "/" + tp
+        # Récupérer la liste des scenarios
+        setup.setup(matiere,tp)
+        project_folder = "repository/projects/" + tp
+        sys.path.append(project_folder)
+        fichier_config = importlib.import_module("config")
+        try:
+            importlib.reload(fichier_config)
+        except UnboundLocalError as error:
+            print(error) # Import dynamique du fichier de configuration 
+        sys.path.remove(project_folder)
+        scenarios = []
+        modalites = False
+        if (os.path.exists(tp_path + "/modalites.txt")):
+            modalites = True
+            scenarios = utility.get_scenarios(tp_path + "/modalites.txt", fichier_config.SCENARIOS)
 
-    if (scenarios == [] and fichier_config.SCENARIOS_To_Test != None):
-        scenarios = fichier_config.SCENARIOS_To_Test
+        if (scenarios == [] and fichier_config.SCENARIOS_To_Test != None):
+            scenarios = fichier_config.SCENARIOS_To_Test
 
-    scenarios_name = [scenario.run.__name__ for scenario in scenarios]
-                                                         
-    evaluate.evaluate(True, modalites, matiere, tp, student_name, "evaluations/retour",  *scenarios_name) 
-
-    
+        scenarios_name = [scenario.run.__name__ for scenario in scenarios]
+                                                            
+        evaluate.evaluate(True, modalites, matiere, tp, student_name, "evaluations/retour",  *scenarios_name) 
+        del fichier_config

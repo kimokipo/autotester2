@@ -1,0 +1,10 @@
+stages:
+  - trigger
+
+trigger:
+  stage: trigger
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    - "curl -X POST --fail -F token=$trigger_token -F ref=main -F variables[PROJECT_SOURCE_ID]=$CI_PROJECT_ID -F variables[COMMIT_SOURCE_SHA]=$CI_COMMIT_SHA https://gitlab.com/api/v4/projects/$project_autotester2_id/trigger/pipeline"
+
