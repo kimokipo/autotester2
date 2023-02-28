@@ -122,28 +122,22 @@ Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la com
 
 
 ```bash
-feat3p evaluateOnDemand <lien_projet>
+feat3p evaluateOnDemand <project_link> <modified_files>
 ```
 
-1. Extraire des informations à partir du lien du projet : nom de l'étudiant, nom du cours, nom de projet.
-2. Appeler la configuration pour récupérer les scénarios pour les projets.
-3. Si modalities.txt existe, récupérer les scénarios à partir de celui-ci, sinon utiliser les scenarios_to_test à partir du fichier de configuration de projet.
+1. Extraire des informations à partir du lien du projet : nom de l'étudiant.
+2. Accéder au fichiers de configuration dans le lien des fichiers modifiés.
+3. Si modalities.txt existe, récupérer les scénarios à partir de celui-ci, sinon utiliser les scenarios_to_test éxigés par le professeur.
 4. Appeler la commande evaluate.
 
 
 Arguments :
 
-* `lien_projet` : Le lien de projet à tester.
+* `project_link` : Le lien de projet à tester.
+* `modified_files` : Les fichiers modifiés par l'étudiant.
 
 
-Dans les faits, cette commande va régulièrement effectuer les commandes **git pull** et **git log** sur le fichier modalites.txt afin de mettre à jour les
-dépôts, puis de vérifier si le fichier de modalités a été modifié depuis le
-dernier cycle de tests, auquel cas un cycle de tests est lancé. Le délai
-d'attente entre deux vérifications des sources des élèves est de 5 secondes par
-défaut. Celui-ci peut être changé depuis la variable **WAIT_TIME** dans le
-fichier `mill.py`.
 
-**TODO :** Il serait préférable que WAIT_TIME soit un argument de la commande : `--period`.
 
 - ### Sur Gitlab ci : 
 Voici les etapes à suivre pour reussir le triggering des depots etudiants depuis le pipeline de projet AutoTester2 afin d'evaluer sur demande les travails des etudiants :
@@ -169,23 +163,25 @@ sans tenir compte de ses contraintes (**XXX:** les quelles ? le fichier
 il faut utiliser la commande suivante :
 
 ```bash
-./feat3p evaluate <matiere> <nom_projet> <etudiant> <retour> <scenario1> <scenario2> ...
+./feat3p evaluate <commit> <modalites> <matiere> <tp> <nom_etudiant> <retour> <scenario1> <scenario2> ...
 ```
-1. Obtenir le dépôt de l'étudiant.
+1. Obtenir le dépôt de l'étudiant à partir de nom_etudiant
+2. Importer le fichier config depuis le chemin de projet et creer les scenarios à tester en ajoutant les tests
+visibles pour l'étudiant si modalites = True.
 2. Créer le fichier modalities.txt si modalities = true.
-3. Exécuter les scénarios du fichier de configuration et obtenir le résultat dans une liste.
+3. Exécuter les scénarios  et obtenir le résultat dans une liste.
 4. Si le paramètre commit est True : envoyer les résultats en commit sur la branche d'évaluation.
-Options :
-
-* --commit : Ajouter cette option pour déposer le fichier retour sur depot git de l'etudiant.
 
 Arguments :
+* `commit` : Boolean pour faire un commit de retour ou pas.
 
-* `nom_projet` : Il s'agit du nom du dossier dans lequel se trouve le fichier de configuration `config.py` concernant le projet que le professeur souhaite tester chez l'élève.
+* `modalites`: Boolean pour éxecuter les tests visibles à l'étudiant dans modalites.txt ou pas.
 
-* `matiere` : Le nom de la matiere dans `variables.json`.
+* `tp` : Le nom de tp ou projet à évaluer.
 
-* `etudiant` : le nom du dépôt git de l'étudiant (en général son login).
+* `matiere` : Le nom de la matiere.
+
+* `nom_etudiant` : le nom du dépôt git de l'étudiant (en général son login).
 
 * `retour` : nom du fichier retour
 
@@ -198,6 +194,8 @@ Il est possible pour le professeur de lancer un cycle de test pour une promo. Po
 ```bash
 feat3p evaluateAll <matiere> <nom_projet> <students_info> <scenario1> <scenario2> ...
 ```
+1. Parcourir la liste des étudiant et récupérer les noms.
+2. Boucler sur la liste des étudiant en éxecutant la fonction evaluate sur chacun des dépots des étudiant.
 
 Options :
 
@@ -205,15 +203,17 @@ Options :
 
 Arguments :
 
-* `nom_projet` : Il s'agit du nom du dossier dans lequel se trouve le fichier de configuration `config.py` concernant le projet que le professeur souhaite tester chez l'élève.
+* `commit` : Boolean pour faire un commit de retour ou pas.
 
-* `matiere` : Le nom de la matiere auquel (dans `variables.json`).
+* `modalites`: Boolean pour éxecuter les tests visibles à l'étudiant dans modalites.txt ou pas.
 
-* `students_info` : Un fichier .csv qui contient les informations des etudiants (login, nom, prenom, adresse mail)
+* `tp` : Le nom de tp ou projet à évaluer.
+
+* `matiere` : Le nom de la matiere.
 
 * `retour` : nom du fichier retour
 
-* `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez les élèves.
+* `scenarios` : une liste de noms de scenario que le professeur souhaite voir testé chez l'élève.
 
 - ### sur Gitlab ci :
 il est possible de lancer manuellement le pipeline de projet Autotester2 pour lancer l'un des deux scripts  **evaluate** ou **evaluateAll**. Pour ce faire :
