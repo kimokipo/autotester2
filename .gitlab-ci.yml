@@ -1,10 +1,12 @@
-image: docker:latest
+# le fichier de configuraion gitlab-ci.yml pour lancer la Framework Autotester2
+
+image: docker:latest  
 
 services:
   - docker:dind
 
 stages:
-  - evaluate
+  - evaluate   # Definir notre stage ou job evaluate pour le pipeline 
 
 before_script:
   - cp -R src src_copy
@@ -13,7 +15,8 @@ variables:
   PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/:$(pwd)/src_copy/isolate/
 
 evaluate:
-  image : registry.gitlab.com/projet-long/autotester2/my-custom-image:latest
+  # utiliser image docker contenant les dependances nécessaires et le code source de notre projet
+  image : registry.gitlab.com/projet-long/autotester2/my-custom-image:latest  
   stage: evaluate
   script:
     - apt-get install gettext-base
@@ -22,4 +25,5 @@ evaluate:
     - export PYTHONPATH=$PYTHONPATH:./src_copy/utils:./src_copy/scenarios/results
     - export PYTHONPATH=$PYTHONPATH:./src_copy/isolate
     - export PYTHONPATH=$PYTHONPATH:./src_copy/main
+    # lancer le main script sh du pipeline 
     - sh src/main/main_pipeline.sh

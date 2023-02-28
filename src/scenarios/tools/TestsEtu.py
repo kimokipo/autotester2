@@ -23,20 +23,24 @@ class TestsEtu(Tool):
             java -ea -cp projectEtu:repository/junit-4.12.jar:repository/hamcrest-core-1.3.jar:. org.junit.runner.JUnitCore MaClasseTest
 
             Paramètres :
-                files : String - Le fichier source à tester
+                projetETU : String - dossier du tp de l'etudiant
+                files : String[] - liste des fichiers contenant les fichiers tests à evaluer
         """
         details = ""
         test_ok = True
         files_runed = []
+        # si la liste files est vide, alors prendre tous les fichiers contenus dans le dossier tp
         if files == []:
             files = os.listdir(projetETU)
         
+        # supprimer tous les fichiers .class pour une recompilation 
         os.chdir(projetETU)
         rmClasses = "rm *.class"
         sp.run(rmClasses, shell = True)
         os.chdir("../../../")
         
         for file in files:
+            # detecter les fichiers de tests
             if "Test" in file and file.endswith('.java'):
                 print(file)
                 test_file = file
@@ -44,10 +48,13 @@ class TestsEtu(Tool):
                 test_path = os.path.join(projetETU, test_file)
                 classpath_comp = projetETU+":repository/junit-4.12.jar"
                 classpath_exec = projetETU+":repository/junit-4.12.jar:repository/hamcrest-core-1.3.jar"
+                
                 if os.path.exists(test_path):
+                    # compiler le fichier test
                     compilation = sp.run(['javac', '-cp', classpath_comp,  test_path])
                     details += str(compilation.stderr)
                     if (compilation.returncode==0):
+                        # executer le fichier test
                         execution = sp.run(['java', '-ea', '-cp', classpath_exec, "org.junit.runner.JUnitCore",  test_file.split('.')[0]])
                         details += str(execution.stderr)
                         if (execution.returncode!=0):
@@ -59,13 +66,5 @@ class TestsEtu(Tool):
 
         return TestsEtuResult(files_runed, details, test_ok)
     
-    def selfcheck(self):
-
-        """
-            Lancement d'un test rapide de compilation sur un hello world ecrit en Java
-        """
-
-        return self.run("tob/tps/khammi/mini-projet",["CercleTest.java"])
-        pass
    
         

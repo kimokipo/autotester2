@@ -20,14 +20,18 @@ import csv
 
 def setup(matiere : str, tp : str):
 
+    # definir le lien du depot Git repository de la matiere, en recuperant les variables definiees dans fichier variables.json
     depot_repo = "https://" + paths["username"] + ":" + paths["password"] + "@" + paths["repository_path"].split("https://")[1] + ".git"
+    
+    # cloner le depot localement
     gitClone = "git clone " + depot_repo
     sp.run(gitClone, shell=True)
 
-    project_folder = "repository/projects/" + tp
-    database_address = os.path.join(project_folder, "database_test.db")
+    project_folder = "repository/projects/" + tp # chemin vers dossier du projet ou tp contenant fichier config.py
+    database_address = os.path.join(project_folder, "database_test.db") # chemin de la base de données
     students_info = "repository/1sn-autotester.csv"  # To do : chercher le fichier csv des etudiants dans le dossier  
 
+    # recuperer les informations de tous les etudiants
     groupe_tp = []
     students_name = []
     with open(students_info) as csv_file:
@@ -39,7 +43,6 @@ def setup(matiere : str, tp : str):
     groupe_tp = groupe_tp[1:]
 
     # Creating a database of all students and scenarios if it doesn't exist
-    # Adding scenarios into scenarios.json    ###### USED IN THE WEBSITE
     if not os.path.exists(database_address):
         sys.path.append(project_folder)
         try :
@@ -49,9 +52,6 @@ def setup(matiere : str, tp : str):
             print("Fichier config.py non trouvé ou mal écrit. Opération avortée.\n")
             sys.exit(1)
         sys.path.remove(project_folder)
-        f = open('scenarios.json',)   # question à quoi sert ce variable scenarios ?
-        scenarios = json.load(f)  
-        scenarios[matiere][tp] = [scenario.run.__name__ for scenario in fichier_config.SCENARIOS]
         utility.create_database(database_address, fichier_config.SCENARIOS, students_name, groupe_tp)
     
     return students_name

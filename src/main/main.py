@@ -14,7 +14,6 @@ from setup import setup
 from evaluate import evaluate
 from evaluateAll import evaluateAll
 from evaluateOnDemand import evaluateOnDemand
-from mill import mill
 
 # --------------------------------------------------------------------
 
@@ -44,8 +43,7 @@ subprogs = {
     "setup" : [setup, 2],
     "evaluate": [evaluate, len(sys.argv)-2],
     "evaluateAll" : [evaluateAll, len(sys.argv)-2],
-    "evaluateOnDemand" : [evaluateOnDemand, len(sys.argv)-2],
-    "mill" : [mill, 2]
+    "evaluateOnDemand" : [evaluateOnDemand, len(sys.argv)-2]
 }
 
 subprog : list = subprogs.get(sys.argv[1], [help, 0])
@@ -55,6 +53,7 @@ nb_args : int = subprog[1]
 if (nb_args+2 > len(sys.argv)) and (subprog != "setup"):
     help(sys.argv[1])
 else:
+    # lancer le script voulu
     if (sys.argv[2] == "--commit" and (sys.argv[1] == "evaluate" or sys.argv[1] == "evaluateAll")):
         arg_list = sys.argv[3:nb_args+2]
         subprog[0](True, False, *arg_list)

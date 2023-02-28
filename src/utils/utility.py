@@ -91,17 +91,32 @@ def modalities_text(scenarios : List[Scenario], database_address : str, student_
 
 
     
-def send_files(student_project_folder : str, files : List[str], section : str):
+def send_files(student_project_folder : str, files : List[str], section : str): 
+    
+    '''
+        Cette fonction peremet d'envoyer à l'etudiant les fichiers d'une partie "section"
+
+        Paramètres de la fonction :
+            student_project_folder : Strnig - le dossier du tp de l'etudiant
+            files : String[] - liste des fichiers à envoyer
+            section : String - nom de la partie du tp nécessitant les fichiers files.    
+        
+    '''
+    # recuperer la matiere
     matiere = paths["matiere"]
+
+    # recuperer le nom de l'etudiant et du tp
     list_split = student_project_folder.split(matiere)[1].split("/")
     student_name = list_split[1]
     tp = list_split[2]
 
+    # se mettre dans la branche main
     os.chdir(student_project_folder)
     gitchekout = "git checkout main"
     sp.run(gitchekout, shell = True) 
     os.chdir("../../../")
 
+    # copier les fichiers files au dossier de l'etudiant si ils n'existent deja la dedans
     fournies_path = "repository/projects/"+tp+"/__fournis/"
     files_copied = []
     for file in files:
@@ -109,6 +124,7 @@ def send_files(student_project_folder : str, files : List[str], section : str):
             shutil.copy(fournies_path+"/"+file, student_project_folder)
             files_copied.append(file)
             
+    # pousser les fichiers copiés sur le depot de l'etudiant
     if (files_copied != []):
         os.chdir(student_project_folder)
         for file in files_copied:
@@ -220,6 +236,7 @@ def run_scenarios(modalites : bool, scenarios : List[Scenario], database_address
         étudiants.
 
         Paramètres de la fonction :
+            modalites : bool - bool pour savoir si l'etudiant a demandé une evaluation de son projet à travers le fichier modalites.txt.
             scenarios : Scenario[] - La liste des scénarios à jouer
             database_address : String - Chemin vers la base de données
             modalities_address : String - Chemin vers le fichier de modalités
@@ -235,7 +252,8 @@ def run_scenarios(modalites : bool, scenarios : List[Scenario], database_address
     for scenario in scenarios :
         # Exécution d'un scénario
         results.append(scenario.run(project_env))
-        if (scenario.getName() == "testsEtu"):
+        # le scenario testerEtu est automatique quand est joué, et n'est pas dans la base données
+        if (scenario.getName() == "testerEtu"):
             continue
         # Récupération du nombre de tentatives et éventuelle modification s'il n'est pas infini
         cur.execute("SELECT Attempts FROM " + scenario.getName() + " WHERE Students = '%s'" % student_name)
@@ -362,7 +380,8 @@ def report(scenarios : List[Scenario], results : List[List[Result]], database_ad
     # Pour chaque scénario joué
     for i in range(len(scenarios)):
         s = scenarios[i]
-        if (s.getName() == "testsEtu"):
+        # le scenario testerEtu est automatique quand est joué, et n'est pas dans la base données
+        if (s.getName() == "testerEtu"):
             continue
         # Compteur de pénalité pour un scénario
         penalty = 0
@@ -410,12 +429,17 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
 
         Paramètres de la fonction :
             results : Result[][] - Liste contenant des listes de Result pour générer l'affichage
+            student_project_folder :  Strnig - le dossier du tp de l'etudiant
             dest_file : String - La localisation du fichier dans lequel écrire les résultats
+            retour : String - nom du retour
+            depot : String - lien du depot de l'etudiant
             mode : Int - Le mode d'écriture (détaillé, synthétique, ...) 
+            commit : Bool - pousser ou pas le retour vers le depot de l'etudiant
     """
+    # recuperer le tp
     tp = student_project_folder.split("/")[-1]
 
-     # Réinitialisation du fichier de destination
+    # creer les dossiers du chemin dest_file
     list_directory = dest_file.split('/')
     for i in range(0,len(list_directory)):
         try:
@@ -423,6 +447,7 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
         except OSError as error:
             print(error)
     
+    # se mettre dans la branche evaluation, ou la creer s'il n'existe pas
     import subprocess as sp
     os.chdir(student_project_folder)
     gitchekout = "git checkout -b evaluations"
@@ -432,6 +457,7 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
     sp.run(gitchekout, shell = True) 
     os.chdir("../../../")
 
+    # Réinitialisation du fichier de destination
     with open(dest_file , "w+") as writer:
         writer.write("")
 
@@ -439,6 +465,8 @@ def print_results(results : List[List[Result]], student_project_folder : str, de
     for list_result in results :
         for result in list_result:
             result.print_result(dest_file, mode)
+
+    # pousser le retour sur le dossier de l'etudiant
     if (commit):
         os.chdir(student_project_folder)
         

@@ -21,6 +21,7 @@ import csv
 
 def evaluateAll(commit : bool, modalites : bool, matiere : str, tp : str, retour : str, *scenarios_name) -> None:
 
+    # recuperer les informations de tous les etudiants
     students_info = "repository/1sn-autotester.csv"  # To do : chercher le fichier csv des etudiants dans le dossier  
     students_name = []
     with open(students_info) as csv_file:
@@ -29,5 +30,6 @@ def evaluateAll(commit : bool, modalites : bool, matiere : str, tp : str, retour
             students_name.append(row[3])
     students_name = students_name[1:]
 
+    # evaluer pour chaque etudiant le travail sur le tp d'une matiere
     for student_name in students_name:
         evaluate.evaluate(commit, modalites, matiere, tp, student_name, retour, *scenarios_name)

@@ -6,17 +6,16 @@ Les sous-programmes sont à choisir parmi :
 |___
     |arg1 : le nom de la matiere
     |arg2 : le nom du tp
-    |arg3 : le nom du fichier csv qui contient les infos de la promo
 
-|mill : détecte les updates svn dans un projet et lance des batteries de tests sur ce projet
+|evaluateOnDemand : lance des batteries de tests sur ce projet (s'execute automatiquement sur Gtilab-ci après un commit dans un projet etudiant)
 |___
-    |arg1 : le nom de la matiere
-    |arg2 : le nom du tp
+    |arg1 : url du projet etudiant
+    |arg2 : liste des dossiers des tps à tester.
 
 |evaluate : lance des batteries de tests sur un étudiant et un TP en particulier
 |___
     |arg1 : le nom de la matiere
-    |arg2 : le login de l'étudiant (ou le nom de son dépôt svn)
+    |arg2 : le login de l'étudiant
     |arg3 : le nom du tp
     |arg4 : les scenarios à tester
 

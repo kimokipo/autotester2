@@ -6,5 +6,6 @@ import os
 featpp_path = os.path.dirname(__file__)
 featpp_path = os.path.split(featpp_path)[0]
 
+# chargement des variables contenus dans variables.json
 with open(os.path.join(featpp_path, "variables.json"), 'r') as f:
         paths = json.load(f)

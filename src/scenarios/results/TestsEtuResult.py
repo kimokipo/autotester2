@@ -3,12 +3,12 @@ from ToolResult import *
 class TestsEtuResult(ToolResult) :
 
     """ 
-        Classe de traitement des résultats retournés par l'outil runTestEtu'
+        Classe de traitement des résultats retournés par l'outil TestEtu'
 
         Paramètres du constructeur :
-            _filenames : String - Noms des fichiers testé
+            _filenames : String - Noms des fichiers testés
             _details : String - Détails d'execution de l'outil
-            _test_compil : Bool - Booléen correspondant à si oui ou non l'intégralité des tests ont fonctionné
+            _test : Bool - Booléen correspondant à si oui ou non l'intégralité des tests ont fonctionné
     """
     
     def __init__(self,_filenames, _details, _test):
