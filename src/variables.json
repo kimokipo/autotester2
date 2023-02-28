@@ -1,8 +1,8 @@
 {   
-    "username" : "kimokipo",
-    "password" : "glpat-iQmYoe6pKsqkY9yicJCU",
-    "mail" : "hammi.kamal.mpsi@hotmail.com",
-    "matiere" : "tob",
-    "gitlabArbre" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/students", 
-    "repository_path" : "https://gitlab.com/projetlong1/2022-sn/tp-b1/tob/repository"
+    "username" : "username",
+    "password" : "password",
+    "mail" : "mail",
+    "matiere" : "matiere",
+    "gitlabArbre" : "gitlabArbre", 
+    "repository_path" : "repository_path"
 }
