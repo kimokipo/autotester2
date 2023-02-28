@@ -120,9 +120,16 @@ Pour cela vous devez  :
 
 Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la commande suivante pour activer la détection automatique des demandes d'évaluation :
 
+
 ```bash
 feat3p evaluateOnDemand <matiere> <nom_projet>
 ```
+
+1. Extraire des informations à partir du lien du projet : nom de l'étudiant, nom du cours, nom de l'affectation
+2. Appeler la configuration pour récupérer les scénarios pour les affectations.
+3. Si modalities.txt existe, récupérer les scénarios à partir de celui-ci, sinon utiliser les scenarios_to_test à partir du fichier de configuration de projet.
+4. Appeler la commande evaluate.
+
 
 Arguments :
 
@@ -164,7 +171,10 @@ il faut utiliser la commande suivante :
 ```bash
 ./feat3p evaluate <matiere> <nom_projet> <etudiant> <retour> <scenario1> <scenario2> ...
 ```
-
+1. Obtenir le dépôt de l'étudiant.
+2. Créer le fichier modalities.txt si modalities = true.
+3. Exécuter les scénarios du fichier de configuration et obtenir le résultat dans une liste.
+4. Si le paramètre commit est True : envoyer les résultats en commit sur la branche d'évaluation.
 Options :
 
 * --commit : Ajouter cette option pour déposer le fichier retour sur depot git de l'etudiant.
@@ -214,6 +224,9 @@ il est possible de lancer manuellement le pipeline de projet Autotester2 pour la
     1. **type_evaluate** : avec valeur **single** pour le script **evaluate** tout seul, ou avec la valeur **All** pour le script **evaluateAll**.
     2. **args** : avec en valeur les arguments de chaque commande mentionnés ci dessus, separes par des espaces.
 * en fin lancer le pipeline.
+
+
+
 
 # IV. Documents utiles <a id='documents'></a>
 
