@@ -122,7 +122,7 @@ Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la com
 
 
 ```bash
-feat3p evaluateOnDemand <matiere> <nom_projet>
+feat3p evaluateOnDemand <lien_projet>
 ```
 
 1. Extraire des informations à partir du lien du projet : nom de l'étudiant, nom du cours, nom de projet.
@@ -133,8 +133,8 @@ feat3p evaluateOnDemand <matiere> <nom_projet>
 
 Arguments :
 
-* `matiere` : Le nom de la matiere dans `variables.json`.
-* `nom_projet` : Il s'agit du nom du dossier dans lequel se trouve le fichier de configuration `config.py` concernant le projet que le professeur souhaite tester chez l'élève.
+* `lien_projet` : Le lien de projet à tester.
+
 
 Dans les faits, cette commande va régulièrement effectuer les commandes **git pull** et **git log** sur le fichier modalites.txt afin de mettre à jour les
 dépôts, puis de vérifier si le fichier de modalités a été modifié depuis le
