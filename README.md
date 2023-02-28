@@ -125,8 +125,8 @@ Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la com
 feat3p evaluateOnDemand <matiere> <nom_projet>
 ```
 
-1. Extraire des informations à partir du lien du projet : nom de l'étudiant, nom du cours, nom de l'affectation
-2. Appeler la configuration pour récupérer les scénarios pour les affectations.
+1. Extraire des informations à partir du lien du projet : nom de l'étudiant, nom du cours, nom de projet.
+2. Appeler la configuration pour récupérer les scénarios pour les projets.
 3. Si modalities.txt existe, récupérer les scénarios à partir de celui-ci, sinon utiliser les scenarios_to_test à partir du fichier de configuration de projet.
 4. Appeler la commande evaluate.
 
