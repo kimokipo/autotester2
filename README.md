@@ -69,7 +69,7 @@ Voici l'architecture des projects et depots Gitlab :
 ![Architecture](https://gitlab.com/projet-long/AutoTester2/-/raw/main/architecture-projet.png)
 Le diagramme de classe est disponible à l'URL :
 
-tinyurl.com/v53amb9x // mettre le nouveau lien
+https://tinyurl.com/ClassDiagramAutotester2
 
 # III. Commandes  <a id='commandes'></a>
 
