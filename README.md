@@ -55,7 +55,7 @@ git clone https://gitlab.com/projet-long/AutoTester2
 ```
 * Pour l'utilisation sous Gitlab-ci :
     1. creer un nouveau projet AutoTester2
-    2. impoter le fichier de configuration yml : **gitlab-ci.yml** qui situé sur la racine du projet : https://gitlab.com/projet-long/AutoTester2
+    2. impoter le fichier de configuration yml dde l'enseignant : **gitlab-ci-teacher.yml** qui situé sur la racine du projet : https://gitlab.com/projet-long/AutoTester2, et en le renommant avec le nom de base **gitlab-ci.yml**
     3. se rendre dans la section CI/CD -> Pipelines
 
 
