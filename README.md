@@ -33,14 +33,9 @@ programmes, il faut avoir une version de Python 3 ou supérieure, avec la
 majorité des modules classiques (os, sys, etc.) importés via Anaconda, par
 exemple.
 
-On précise toutefois ici que seule une machine Linux pourra accéder à la
-fonctionnalité "isolate" qui permet d'exécuter des codes inconnus en toute
-sécurité. Le reste de l'application fonctionne sur tous les systèmes
-d'exploitation.
 - ### Sur Gitlab - ci
 Pour utiliser le framework sur Gitlab-ci avec une pipeline executant un runner, il est important d'utiliser l'image docker que nous avons creé et qui est meni de touts les dependances necessiares, ainsi que les fichiers scr de notre projet.
-il est à telecharger sur le lien suivant : 
-// lien
+il est sur le lien suivant : registry.gitlab.com/projet-long/autotester2/autotester2-image:latest
 
 
 ## Comment installer  feat3p ?
