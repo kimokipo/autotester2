@@ -38,12 +38,13 @@ def evaluate(commit : bool, modalites : bool, matiere : str, tp : str, student_n
     '''
 
    
-    project_env = ProjectEnv(student_path + "/" + tp, project_folder)
-
     #Definition de tous les chemins nécessaires à partir de l'environnement donné en argument
     project_folder = "repository/projects/" + tp # chemin vers dossier du projet ou tp contenant fichier config.py. 
     student_path = matiere + "/" + student_name # chemin vers dossier du projet etudiant. 
     student_project_folder = os.path.join(student_path, tp) # chemin vers le dossier tp chez etudiant.
+
+    # Instancier projectEnv
+    project_env = ProjectEnv(student_path + "/" + tp, project_folder)
 
     # Recuperation de la derniere revision
     

@@ -19,10 +19,10 @@ import json
 import csv
 
 
-def evaluateAll(commit : bool, modalites : bool, matiere : str, tp : str, retour : str, *scenarios_name) -> None:
+def evaluateAll(commit : bool, modalites : bool, matiere : str, tp : str, students_info : str, retour : str, *scenarios_name) -> None:
 
     # recuperer les informations de tous les etudiants
-    students_info = "repository/1sn-autotester.csv"  # To do : chercher le fichier csv des etudiants dans le dossier  
+    students_info = "repository/" + students_info
     students_name = []
     with open(students_info) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')

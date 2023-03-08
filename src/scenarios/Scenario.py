@@ -3,8 +3,8 @@
 '''
 import types
 
-DELAY = 5 # Delai par defaut entre deux tentatives de test pour un etudiant
-INFINITE_ATTEMPTS = -1
+DELAY = 5 # Delai par defaut entre deux tentatives de test pour un etudiant (l'ajouter comme variable dans pipeline)
+INFINITE_ATTEMPTS = -1 
 
 class Scenario():
 

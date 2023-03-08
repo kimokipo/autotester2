@@ -66,5 +66,13 @@ class TestsEtu(Tool):
 
         return TestsEtuResult(files_runed, details, test_ok)
     
-   
+    def selfcheck(self):
+
+        """
+            Lancement d'une execution de fichier test de mini-projet du tob
+        """
+
+        return self.run([os.path.abspath("tob/khammi/mini-projet")], ["CercleTest.java"])
+        pass
+
         

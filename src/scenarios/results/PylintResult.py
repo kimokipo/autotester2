@@ -1,7 +1,7 @@
 from ToolResult import *
 from typeAnnotations import *
 
-class PylintResult(ToolResult) :
+class pylintResult(ToolResult) :
 
     """ 
         Classe de traitement des résultats retournés par SimJava
@@ -13,10 +13,8 @@ class PylintResult(ToolResult) :
             errors : int - Le nombre d'erreurs de checkstyle dans le fichier
     """
     
-    def __init__(self, _filename : str, _test : bool, errors : int, details : str):
-        title = "Test pylint de " + _filename.split('/')[-1] + ' => ' + str(errors)
-        if errors != 0:
-            title += ' (voir pylint.log)'
+    def __init__(self, _filename : str, _test : bool, errors : str, details : str):
+        title = errors
         if _test:      
             result = OK
         else:
