@@ -11,6 +11,10 @@ stages:
   - evaluate   # Definir notre stage ou job evaluate pour le pipeline 
 
 before_script:
+  # copy the source code of project Autoteter2 from root to current directory
+  # uncomment the two command of cp if you use Autotester2, and not developping it
+  #- cp -R ../../../src src
+  #- cp ../../../feat3p feat3p
   - cp -R src src_copy
 
 variables:
