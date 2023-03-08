@@ -10,9 +10,6 @@ une machine et/ou le configurer avec gitlab-ci, comment utiliser les différente
 comment configurer les fichiers nécessaires au bon fonctionnement du framework.
 
 
-Le diagramme de classe est disponible à l'URL :
-tinyurl.com/v53amb9x  // mettre le nouveau diagramme de classe
-
 ### Table des matières
 
 I. [Installation du framework](#installation)
@@ -122,7 +119,7 @@ Une fois que tout a été configuré, l'utilisateur n'a plus qu'à lancer la com
 
 
 ```bash
-feat3p evaluateOnDemand <project_link> <modified_files>
+feat3p evaluateOnDemand <project_student_link> <tp_folders>
 ```
 
 1. Extraire des informations à partir du lien du projet : nom de l'étudiant.
@@ -133,8 +130,8 @@ feat3p evaluateOnDemand <project_link> <modified_files>
 
 Arguments :
 
-* `project_link` : Le lien de projet à tester.
-* `modified_files` : Les fichiers modifiés par l'étudiant.
+* `project_student_link` : Le lien de depot Git de l'étudiant.
+* `tp_folders` : Les dossiers de tp/projet modifiés par l'étudiant.
 
 
 
@@ -150,9 +147,9 @@ Voici les etapes à suivre pour reussir le triggering des depots etudiants depui
 
     ces deux variables vont etre utilisés par le pipeline de projet de chaque etudiant. pour cela il faut:
 
-4. ajouter le fichier **gitlab-ci-etudiant.yml** situé sur le projet : https://gitlab.com/projet-long/AutoTester2, et le mettre dans la racine du depot de chaque etudiant, en le renommant avec le nom de base : **gitlab-ci.yml**
+4. ajouter le fichier **gitlab-ci-student.yml** situé sur le projet : https://gitlab.com/projet-long/AutoTester2, et le mettre dans la racine du depot de chaque etudiant, en le renommant avec le nom de base : **gitlab-ci.yml**
 
-du coup si vous reussirer a faire ces etapes correctement. à chaque commit de modification par l'etudiant de son travail, le pipeline du projet etudiant se lance et qui lui declenche le pipeline du projet principale AutoTester2 pour faire l'evaluation automatique.
+du coup si vous réussirez a faire ces etapes correctement. à chaque commit de modification par l'etudiant de son travail, le pipeline du projet etudiant se lance et qui lui declenche le pipeline du projet principale AutoTester2 pour faire l'evaluation automatique.
 
 ## B. Lancer un cycle de tests  <a id='evaluate'></a>
 
@@ -163,7 +160,7 @@ sans tenir compte de ses contraintes (**XXX:** les quelles ? le fichier
 il faut utiliser la commande suivante :
 
 ```bash
-./feat3p evaluate <commit> <modalites> <matiere> <tp> <nom_etudiant> <retour> <scenario1> <scenario2> ...
+./feat3p evaluate <commit> <modalites> <matiere> <tp> <student_name> <retour> <scenario1> <scenario2> ...
 ```
 1. Obtenir le dépôt de l'étudiant à partir de nom_etudiant
 2. Importer le fichier config depuis le chemin de projet et creer les scenarios à tester en ajoutant les tests
@@ -175,13 +172,13 @@ visibles pour l'étudiant si modalites = True.
 Arguments :
 * `commit` : Boolean pour faire un commit de retour ou pas.
 
-* `modalites`: Boolean pour éxecuter les tests visibles à l'étudiant dans modalites.txt ou pas.
+* `modalites`: Boolean pour savoir si l'étudiant a demandé un éveluation des scenarios dans modalites.txt ou pas.
 
 * `tp` : Le nom de tp ou projet à évaluer.
 
 * `matiere` : Le nom de la matiere.
 
-* `nom_etudiant` : le nom du dépôt git de l'étudiant (en général son login).
+* `student_name` : le nom du dépôt git de l'étudiant (en général son login).
 
 * `retour` : nom du fichier retour
 
@@ -192,7 +189,7 @@ Arguments :
 Il est possible pour le professeur de lancer un cycle de test pour une promo. Pour cela il faut utiliser la commande suivante :
 
 ```bash
-feat3p evaluateAll <matiere> <nom_projet> <students_info> <scenario1> <scenario2> ...
+feat3p evaluateAll <commit> <modalites> <matiere> <tp> <students_info> <scenario1> <scenario2> ...
 ```
 1. Parcourir la liste des étudiant et récupérer les noms.
 2. Boucler sur la liste des étudiant en éxecutant la fonction evaluate sur chacun des dépots des étudiant.
@@ -207,9 +204,11 @@ Arguments :
 
 * `modalites`: Boolean pour éxecuter les tests visibles à l'étudiant dans modalites.txt ou pas.
 
+* `matiere` : Le nom de la matiere.
+
 * `tp` : Le nom de tp ou projet à évaluer.
 
-* `matiere` : Le nom de la matiere.
+* `students_info` : nom de fichier scv contenant les infos des étudiants et qui existe sur le dépot repository.
 
 * `retour` : nom du fichier retour
 
@@ -393,113 +392,7 @@ Aprés que l'etudiant remplie le fichier "file1.java" et le commit, le scenario 
 Si le test passe on va transmettre les fichiers de l'exercice suivant, sinon une penalité est ajoutée.
 
 
-### Note concernant la sécurité de la machine lors de l'exécution du code d'un étudiant
-
-Cette section n'a d'intérêt que lorsque le besoin de redéfinir ponctuellement
-la fonction `run()` d'un outil se présente (ce qui devrait ne se produire que
-peu). Hors de ce cas de figure, cette section peut être ignorée. Cette section
-relève plus du développement que de l'utilisation, mais présente des problèmes
-pouvant être rencontrés par les enseignants.
-
-Afin d'assurer la sécurité des machines des enseignants, tout code auquel on ne
-peut pas faire confiance (notamment celui des étudiants) doit être exécuté dans
-un environnement isolé.
-Ainsi, si la fonction `run()` d'un outil exécutant un code auquel on ne fait
-pas confiance est redéfinie, les appels d'exécution de ce code doivent se faire
-avec la fonction `isolate_run(id, options, prog)` définie dans le fichier
-`isolate.py`, `id` étant accessible depuis l'attribut `ProjectEnv.isolate_id`,
-`options` permettant de contrôler les restrictions appliquées sur le code
-exécuté (cf. http://www.ucw.cz/moe/isolate.1.html), et `prog` contenant un
-appel en ligne de commande de syntaxe similaire à celui de `SubProcess.run()`.
-
-À noter cependant que toutes les sources et les fichiers avec lesquels le code
-doit interagir au cours de son exécution doivent avoir été déplacés dans le
-dossier correspondant à l'environnement isolé avant l'exécution. L'intégralité
-du dossier source de l'étudiant est déplacée au début du cycle de tests,
-cependant tout fichier nécessaire et extérieur au dossier source de l'étudiant
-doit être déplacé à l'aide de la fonction `isolate_mv(isolated_dir, files)`,
-`isolated_dir` étant accessible depuis l'attribut
-`ProjectEnv.path_to_isolate_env`, et `files` étant une liste de chemins
-(absolus ou relatifs à l'environnement d'exécution de FEAT++) vers les
-fichiers/dossiers à déplacer.
-
-À noter également que les appels de commandes externes à l'environnement isolé
-(par exemple `sh` ou `java`) par la fonction `isolate_run(id, options, prog)`
-doivent être fait avec le chemin absolu de l'exécutable (par exemple :
-`/usr/bin/sh` ou `/usr/bin/java`), et que les chemins vers des fichiers dans
-l'environnement isolé dans la commande passée dans le paramètre `prog` doivent
-être relatifs à la racine de l'environnement isolé (par exemple :
-"src/TP_java/HelloWorld.java").
-
-Un problème peut survenir dans le cas où le chemin absolu donné pour un
-exécutable est en réalité un lien symbolique. Le problème peut être contourné
-en utilisant la commande `realpath` ou `readlink` (par exemple :
-`$(/usr/bin/realpath /usr/bin/java)`), ou en remplaçant le chemin par le
-contenu d'une variable d'environnement dans laquelle le chemin réel a été
-enregistré au préalable (par exemple : `PATHTOJAVA=$(realpath $(which java))`).
-
-
-## B. Fichiers relatifs aux scripts de tests  <a id='script'></a>
-
-### B.1 Les fichiers du dossier ScriptsTests  <a id='ScriptsTests'></a>
-
-Ce dossier contient tous les fichiers qui vont devoir être appelé par les outils et qui ne seront pas chez l'étudiant. Par exemple pour les tests en boîte noire, on trouvera ici les fichiers qui permettront de comparer le résultat et qui doivent se terminer par `.expected` et les fichiers qui permettent de décrire ce que doit executer le test en boite noire, ceux-ci doivent se terminer par `.run`. En voici deux exemples :
-
-__exempleConfiantTricheurSujet.run__
-
-```bash
-!/bin/bash
-/usr/lib/jvm/java-11-openjdk-amd64/bin/java allumettes.Partie -confiant Ordinateur@rapide Tricheur@tricheur << EOF
-EOF
-```
-
-Pour l'instant, il faut mettre le chemin complet pour appeler des logiciels.
-
-__exempleConfiantTricheurSujet.expected__
-
-```
-Nombre d'allumettes restantes : 13
-Au tour de Ordinateur.
-Ordinateur prend 3 allumettes.
-
-Nombre d'allumettes restantes : 10
-Au tour de Tricheur.
-Tricheur prend 1 allumette.
-
-Nombre d'allumettes restantes : 1
-Au tour de Ordinateur.
-Ordinateur prend 1 allumette.
-Ordinateur a perdu !
-Tricheur a gagné !
-```
-
-### B.2 Les fichiers du dossier TestsProject  <a id='TestsProject'></a>
-
-Le but de ce dossier est de permettre l'utilisation de la commande **runtests**. Le fichier le plus important de ce dossier est  `tests_runner.py`. Celui-ci contient un dictionnaire python qui permet de préciser quel scenario de quel dossier doit bien s'exécuter ou doit mal s'exécuter. En effet, pour vérifier le bon fonctionnement de son projet, le professeur peut simuler le code des élèves de telle sorte que les résultats des scénarios de tests doivent être positifs ou négatifs. 
-
-Ce fichier est en directe corrélation avec la liste __SCENARIOS_TESTS__ définie dans le fichier config.py. Le professeur a connaissance des scénarios qu'il a placés dans cette liste pour ses tests personnels.
-
-Ce dictionnaire est écrit comme suit :
-
-```
-TESTS = {
-    "ExampleTestOK" : True,
-    "ExampleTestKO" : {
-        "scenario2" : True,
-        "scenario_test" : False,
-        "bad_scenario_test" : False
-    },
-}
-```
-
-__ExampleTestOk__ est un dossier qui contient une simulation de fichier source d'un élève tel que tous les tests de __SCENARIOS_TESTS__ doivent bien s'exécuter.
-
-__ExampleTestKO__ est un dossier qui contient une simulation de fichier source d'un élève tel que le scenario2 doit bien s'exécuter tandis qu'il doit y avoir au moins une erreur en exécutant les deux autres.
-
-
-
-
-## C. Fichier de modalités : modalites.txt <a id='modalites'></a> 
+## B. Fichier de modalités : modalites.txt <a id='modalites'></a> 
 - le fichier modalites.txt doit etre par preference dans la racine du depot git de etudiant, ce meme depot contient les dossiers de tps et projets de l'etudiant.
 
 Le fichier `modalites.txt` est généré lors de la [configuration d'un projet](#config). Le fichier de modalités est le support que les étudiants utilisent pour demander une évaluation de leur code. Ce fichier contient plusieurs blocs de textes, chacun relatif à un scénario de tests écrit par un professeur. Chaque bloc de texte contient le nom du scénario, la dernière date d'utilisation de ce scénario, la prochaine date à laquelle il pourra être relancé et enfin le nombre de tentatives restantes et déjà effectuées. Pour identifier les scénarios qu'un étudiant veut jouer, il suffit que ce dernier remplace le terme "non" écrit à côté du nom du scénario par "oui". Il est aussi possible de jouer tous les scénarios en remplaçant "non" par "oui" sur la première ligne du fichier de modalités, ainsi que de ne jouer que les scénario sans restriction du nombre de tentatives en remplaçant "non" par "oui" sur la deuxième ligne du fichier. Voici un exemple de fichier de modalités :
