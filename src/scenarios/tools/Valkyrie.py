@@ -2,7 +2,6 @@ from Tool import Tool
 from ValkyrieResult import ValkyrieResult
 from typeAnnotations import *
 from ProjectEnv import ProjectEnv
-from isolate import *
 import subprocess as sp
 import os
 import pathlib

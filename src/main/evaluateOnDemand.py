@@ -2,7 +2,6 @@ import os
 import time
 import subprocess
 import sys
-from isolate import *
 from ProjectEnv import ProjectEnv
 import evaluate
 import setup

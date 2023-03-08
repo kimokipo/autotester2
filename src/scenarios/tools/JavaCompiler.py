@@ -5,7 +5,6 @@ from Result import Result
 from ProjectEnv import ProjectEnv
 import subprocess as sp
 from typeAnnotations import *
-from isolate import *
 
 
 class JavaCompiler(Tool):

@@ -4,7 +4,6 @@ from typing import Dict
 
 # Modules featpp
 from typeAnnotations import *
-from isolate import *
 
 # Fichier qui stocke les paths utiles
 from variables import *
