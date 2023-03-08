@@ -6,7 +6,8 @@ services:
   - docker:dind
 
 stages:
-  - build
+  # uncomment the stage if you change the source code and want to rebuild the image docker
+  #- build
   - evaluate   # Definir notre stage ou job evaluate pour le pipeline 
 
 before_script:
@@ -15,7 +16,7 @@ before_script:
 variables:
   PYTHONPATH: $PYTHONPATH:$(pwd)/src_copy/scenarios/tools:$(pwd)/src_copy/utils/:$(pwd)/src_copy/isolate/
 
-# stage to build the image docker while developping
+# stage to build the image docker with dependencies and source code
 build:
   stage: build
   script:
