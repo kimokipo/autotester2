@@ -1,22 +1,6 @@
 import subprocess
 import os
-
-# PytestResult class 
-class PytestResult:
-    # Initialisation
-    def __init__(self, test_file, return_code, stdout, stderr):
-        self.test_file = test_file
-        self.return_code = return_code
-        self.stdout = stdout
-        self.stderr = stderr
-    
-    # On verifie que le Pytest run ait marché
-    def success(self):
-        return self.return_code == 0
-    
-    # Return a string representation of the PytestResult object
-    def __str__(self):
-        return f"Test file: {self.test_file}\nReturn code: {self.return_code}\nStandard Output:\n{self.stdout}\nStandard Error:\n{self.stderr}"
+from PytestResult import PytestResult
 
 # Pytest class utilisé pour run les Pytest
 class Pytest:
@@ -25,16 +9,15 @@ class Pytest:
         self.results = [] # liste qui va stocker les Pytest runs
         
     # Run les Pytests tests
-    def run(self, test_file, options=[]):
+    def run(self, test_file):
         # The command to run the Pytest tests
-        command = ['pytest', test_file] + options
+        command = ['pytest', test_file]
         
         # Run the Pytest tests and capture its output
         result = subprocess.run(command, capture_output=True, text=True)
         
         # Store the result of the Pytest run in the results list
-        self.results.append(PytestResult(test_file, result.returncode, result.stdout, result.stderr))
-        return self.results[-1]
+        return PytestResult(test_file, result.returncode == 0, result.stderr, result.stdout)
         
     # Run a quick self check test of Pytest
     def selfcheck(self):

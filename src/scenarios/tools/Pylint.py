@@ -10,7 +10,7 @@ import pathlib
 class pylint():
 
     """
-    Classe des tests de checkstyle.
+    Classe des tests de pylint.
     """
 
     def init(self):
