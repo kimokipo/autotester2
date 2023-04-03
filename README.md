@@ -57,7 +57,7 @@ git clone https://gitlab.com/projet-long/AutoTester2
 # II. Architecture du framework <a id='architecture'></a>
 
 Voici l'architecture des projets et dépôts Gitlab : 
-![Architecture](https://gitlab.com/projet-long/AutoTester2/-/raw/main/architecture-projet.png)
+![Architecture](https://raw.githubusercontent.com/kimokipo/autotester2/main/architecture-projet.png)
 Le diagramme de classe est disponible à l'URL :
 
 https://tinyurl.com/ClassDiagramAutotester2
