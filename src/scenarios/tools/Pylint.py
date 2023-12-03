@@ -36,10 +36,10 @@ class pylint():
         list_refactor = [ch for ch in str(details.decode("utf-8")).split('\n') if ch.startswith('R')]
         
         my_information = "Test pylint de " + file.split('/')[-1] + " => errors :" + str(len(list_erreurs))
-        my_information = my_information + "\nTest pylint de " + file.split('/')[-1] + " => failures :" + str(len(list_failures))
-        my_information = my_information +  "\nTest pylint de " + file.split('/')[-1] + " => conventions :" + str(len(list_conventions))
-        my_information = my_information +  "\nTest pylint de " + file.split('/')[-1] + " => warnings :" + str(len(list_warnings))
-        my_information = my_information +  "\nTest pylint de " + file.split('/')[-1] + " => refactor :" + str(len(list_refactor))
+        my_information = my_information + "\nTest pylint de " + file.split('/')[-1] + " => failures : " + str(len(list_failures))
+        my_information = my_information +  "\nTest pylint de " + file.split('/')[-1] + " => conventions : " + str(len(list_conventions))
+        my_information = my_information +  "\nTest pylint de " + file.split('/')[-1] + " => warnings : " + str(len(list_warnings))
+        my_information = my_information +  "\nTest pylint de " + file.split('/')[-1] + " => refactor : " + str(len(list_refactor))
         
         test = len(list_erreurs) == 0
 
